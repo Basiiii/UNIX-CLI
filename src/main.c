@@ -59,14 +59,19 @@ int main() {
   //   perror("Error");
   // }
 
-  int numLines = 0;
-  int result3 = CountLines("test", &numLines);
-  if (result3 < SUCCESS) {
-    PrintError(result3);
-  } else if (result3 > SUCCESS) {
-    perror("Error");
-  }
-  printf("Number of lines: %d\n", numLines);
+  // int numLines = 0;
+  // int result3 = CountLines("test", &numLines);
+  // if (result3 < SUCCESS) {
+  //   PrintError(result3);
+  // } else if (result3 > SUCCESS) {
+  //   perror("Error");
+  // }
+  // printf("Number of lines: %d\n", numLines);
+
+  // int result4 = DeleteFile("test");
+  // if (result4 != SUCCESS) {
+  //   perror("Error");
+  // }
 
   return 0;
 }

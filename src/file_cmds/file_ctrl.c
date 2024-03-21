@@ -33,8 +33,8 @@
  * @brief Displays the contents of a file to stdout.
  *
  * This function opens the specified file in read-only mode and displays its
- * contents to the standard output (stdout). It reads the file in chunks of
- * 4096 bytes and writes them to stdout until the end of file is reached.
+ * contents to the standard output (stdout). It reads the file in chunks and
+ * writes them to stdout until the end of file is reached.
  *
  * If the file does not exist or cannot be opened for reading, this function
  * returns the corresponding error code stored in errno. You can use the
@@ -42,9 +42,9 @@
  * message.
  *
  * @param filename The name of the file who's content is to be displayed.
- * @return Returns 0 if the file is successfully displayed. If an error occurs,
- * returns the error code stored in errno. See the errno.h header file for
- * possible error codes.
+ * @return Returns a success code if the file is successfully displayed. If an
+ * error occurs, returns the error code stored in errno. See the errno.h header
+ * file for possible error codes.
  *
  * @code{.c}
  * // Example usage:
@@ -96,9 +96,9 @@ int ShowFile(const char *filename) {
  * code stored in errno.
  *
  * @param filename The name of the file to be copied.
- * @return Returns 0 if the file is successfully copied. If an error occurs,
- * returns the error code stored in errno. See the errno.h header file for
- * possible error codes.
+ * @return Returns a success code if the file is successfully copied. If an
+ * error occurs, returns the error code stored in errno. See the errno.h header
+ * file for possible error codes.
  *
  * @code{.c}
  * // Example usage:
@@ -168,9 +168,9 @@ int CopyFile(const char *filename) {
  * @param source The name of the file whose content is to be appended.
  * @param destination The name of the file to which the content is to be
  * appended.
- * @return Returns 0 if the file is successfully copied. If an error occurs,
- * returns the error code stored in errno. See the errno.h header file for
- * possible error codes.
+ * @return Returns a success code if the file is successfully copied. If an
+ * error occurs, returns the error code stored in errno. See the errno.h header
+ * file for possible error codes.
  *
  * @code{.c}
  * // Example usage:
@@ -237,9 +237,9 @@ int AppendFile(const char *source, const char *destination) {
  *
  * @param filename The name of the file whose lines are to be counted.
  * @param numLines Pointer to an int where the number of lines will be stored.
- * @return Returns 0 if successful. If an error occurs, returns an error
- * code. The specific error code can be obtained by checking `errno`. For a null
- * pointer error, the function returns a custom error code defined by
+ * @return Returns a success code if successful. If an error occurs, returns an
+ * error code. The specific error code can be obtained by checking `errno`. For
+ * a null pointer error, the function returns a custom error code defined by
  * `NULL_POINTER`.
  *
  * @code{.c}
@@ -294,6 +294,42 @@ int CountLines(const char *filename, int *numLines) {
 
   // Close the file
   if (close(fd) == -1) {
+    return errno;
+  }
+
+  return SUCCESS;
+}
+
+/**
+ * @brief Deletes a file from the filesystem.
+ *
+ * This function attempts to remove the specified file from the filesystem. If
+ * the file is successfully removed, the function returns a success code. If the
+ * file cannot be removed, for example, due to insufficient permissions or
+ * because the file is in use, the function returns an error code. The specific
+ * error code can be obtained by checking `errno`.
+ *
+ * @param filename The name of the file to be deleted.
+ * @return Returns a success code if the file is successfully deleted. If an
+ * error occurs, returns an error code. The specific error code can be obtained
+ * by checking `errno`.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = DeleteFile("example.txt");
+ * if (result != 0) {
+ *     fprintf(stderr, "Error deleting file: %s\n", strerror(errno));
+ *     return 1;
+ * }
+ * printf("File deleted successfully.\n");
+ * @endcode
+ */
+int DeleteFile(const char *filename) {
+  // Delete the file
+  int result = unlink(filename);
+
+  // If we cannot delete return error code
+  if (result != 0) {
     return errno;
   }
 
