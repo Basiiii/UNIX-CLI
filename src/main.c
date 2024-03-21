@@ -47,5 +47,15 @@ int main() {
     perror("Error");
   }
 
+  int result1 = CopyFile("test");
+  if (result1 != SUCCESS) {
+    perror("Error");
+  }
+
+  int result2 = AppendFile("source", "dest");
+  if (result2 != SUCCESS) {
+    perror("Error");
+  }
+
   return 0;
 }

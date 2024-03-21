@@ -60,4 +60,54 @@
  */
 int ShowFile(const char *filename);
 
+/**
+ * @brief Creates a copy of the specified file.
+ *
+ * This function creates a new file named "ficheiro.copia" with the content
+ * copied from the specified file. If the specified file does not exist or
+ * cannot be opened for reading, the function returns the corresponding error
+ * code stored in errno.
+ *
+ * @param filename The name of the file to be copied.
+ * @return Returns 0 if the file is successfully copied. If an error occurs,
+ * returns the error code stored in errno. See the errno.h header file for
+ * possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = CopyFile("ficheiro.txt");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error copying file: %s\n", strerror(result));
+ *     return 1;
+ * }
+ * @endcode
+ */
+int CopyFile(const char *filename);
+
+/**
+ * @brief Appends the content of one file to another.
+ *
+ * This function appends the content of the source file to the end of the
+ * destination file. If either of the files does not exist or cannot be opened
+ * for reading or writing, the function returns the corresponding error
+ * code stored in errno.
+ *
+ * @param source The name of the file whose content is to be appended.
+ * @param destination The name of the file to which the content is to be
+ * appended.
+ * @return Returns 0 if the file is successfully copied. If an error occurs,
+ * returns the error code stored in errno. See the errno.h header file for
+ * possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = AppendFile("source.txt", "destination.txt");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error appending file: %s\n", strerror(result));
+ *     return 1;
+ * }
+ * @endcode
+ */
+int AppendFile(const char *source, const char *destination);
+
 #endif /* FILE_CTRL_H */

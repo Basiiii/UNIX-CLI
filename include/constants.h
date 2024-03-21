@@ -24,7 +24,10 @@
  * @copyright Copyright (c) 2024
  */
 /* GENERAL CONSTANTS */
-#define VERSION "0.1"
+#define VERSION "0.1" // current version number
 
 /* OPERATION RETURN CODES */
 #define SUCCESS 0 // operation success code
+
+/* BUFFERS */
+#define BUFFER_SIZE 4096 // max buffer size

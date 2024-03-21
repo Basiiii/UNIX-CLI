@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include "constants.h"
@@ -61,7 +62,7 @@ int ShowFile(const char *filename) {
   }
 
   // Read and output the contents of the file
-  char buffer[4096]; // Buffer to store read data
+  char buffer[BUFFER_SIZE]; // Buffer to store read data
   ssize_t bytes_read;
   while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
     if (write(STDOUT_FILENO, buffer, bytes_read) != bytes_read) {
@@ -81,6 +82,141 @@ int ShowFile(const char *filename) {
   if (close(fd) == -1) {
     return errno;
   }
+
+  return SUCCESS;
+}
+
+/**
+ * @brief Creates a copy of the specified file.
+ *
+ * This function creates a new file named "ficheiro.copia" with the content
+ * copied from the specified file. If the specified file does not exist or
+ * cannot be opened for reading, the function returns the corresponding error
+ * code stored in errno.
+ *
+ * @param filename The name of the file to be copied.
+ * @return Returns 0 if the file is successfully copied. If an error occurs,
+ * returns the error code stored in errno. See the errno.h header file for
+ * possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = CopyFile("ficheiro.txt");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error copying file: %s\n", strerror(result));
+ *     return 1;
+ * }
+ * @endcode
+ */
+int CopyFile(const char *filename) {
+  // TODO: Nome do ficheiro literalmente `ficheiro.copia`?
+  // TODO: Diretoria do ficheiro na dir atual ou permitimos que o utilizador
+  // possa escolher?
+  // TODO: Podemos utilizar perror() para apresentar o erro ao utilizador?
+
+  // Open the source file in read-only mode
+  int srcfd = open(filename, O_RDONLY);
+  if (srcfd == -1) {
+    return errno;
+  }
+
+  // Create or truncate the destination file and set its permissions to match
+  // the source file
+  int destfd =
+      open("ficheiro.copia", O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
+  if (destfd == -1) {
+    close(srcfd);
+    return errno;
+  }
+
+  // Read data from source file and write to destination file
+  char buffer[BUFFER_SIZE];
+  ssize_t bytes_read;
+  while ((bytes_read = read(srcfd, buffer, sizeof(buffer))) > 0) {
+    ssize_t bytes_written = write(destfd, buffer, bytes_read);
+    if (bytes_written != bytes_read) {
+      close(srcfd);
+      close(destfd);
+      return errno;
+    }
+  }
+
+  // Check for read error
+  if (bytes_read == -1) {
+    close(srcfd);
+    close(destfd);
+    return errno;
+  }
+
+  // Close files
+  if (close(srcfd) == -1 || close(destfd) == -1) {
+    return errno;
+  }
+
+  return SUCCESS;
+}
+
+/**
+ * @brief Appends the content of one file to another.
+ *
+ * This function appends the content of the source file to the end of the
+ * destination file. If either of the files does not exist or cannot be opened
+ * for reading or writing, the function returns the corresponding error
+ * code stored in errno.
+ *
+ * @param source The name of the file whose content is to be appended.
+ * @param destination The name of the file to which the content is to be
+ * appended.
+ * @return Returns 0 if the file is successfully copied. If an error occurs,
+ * returns the error code stored in errno. See the errno.h header file for
+ * possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = AppendFile("source.txt", "destination.txt");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error appending file: %s\n", strerror(result));
+ *     return 1;
+ * }
+ * @endcode
+ */
+int AppendFile(const char *source, const char *destination) {
+  // Open source file in read only
+  int sourcefd = open(source, O_RDONLY);
+  if (sourcefd == -1) {
+    return errno;
+  }
+
+  // Open destination file in read only append mode
+  int destfd = open(destination, O_WRONLY | O_APPEND);
+  if (destfd == -1) {
+    close(sourcefd);
+    return errno;
+  }
+
+  char buffer[BUFFER_SIZE];
+  ssize_t bytesRead;
+
+  // Read data from source file and append to destination file
+  while ((bytesRead = read(sourcefd, buffer, BUFFER_SIZE)) > 0) {
+    ssize_t bytesWritten = write(destfd, buffer, bytesRead);
+    if (bytesWritten == -1) {
+      close(sourcefd);
+      close(destfd);
+      return errno;
+    }
+  }
+
+  // Check for read error
+  if (bytesRead == -1) {
+    close(sourcefd);
+    close(destfd);
+    return errno;
+  }
+
+  // Close files
+  close(sourcefd);
+  close(destfd);
 
   return SUCCESS;
 }
