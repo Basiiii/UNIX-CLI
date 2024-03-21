@@ -23,8 +23,17 @@
  *
  * @copyright Copyright (c) 2024
  */
-/* GENERAL CONSTANTS */
-#define VERSION "0.1"
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-/* OPERATION RETURN CODES */
-#define SUCCESS 0 // operation success code
+/* GENERAL CONSTANTS */
+#define PROGRAM_NAME "UNIX-Sys-Control" // program name
+#define VERSION "0.1"                   // current version number
+
+/* BUFFERS */
+#define BUFFER_SIZE 4096 // max buffer size
+
+/* FILE INFORMATION */
+#define FILE_INFO_STR_SIZE 50 // size of strings in `FileInfo` structure
+
+#endif /* CONSTANTS_H */

@@ -20,10 +20,13 @@
  */
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "constants.h"
+#include "error_codes.h"
 #include "file_ctrl.h"
+#include "handle_errors.h"
 
 /**
  * @brief Main entry point of the program.
@@ -40,12 +43,50 @@
  * @return int Returns 0 upon successful execution.
  */
 int main() {
-  printf("Version: %s\n", VERSION);
+  printf("%s version %s.\n\n", PROGRAM_NAME, VERSION);
 
-  int result = ShowFile("test");
-  if (result != SUCCESS) {
-    perror("Error");
-  }
+  // int result = ShowFile("test");
+  // if (result != SUCCESS) {
+  //   perror("Error");
+  // }
+
+  // int result1 = CopyFile("test");
+  // if (result1 != SUCCESS) {
+  //   perror("Error");
+  // }
+
+  // int result2 = AppendFile("source", "dest");
+  // if (result2 != SUCCESS) {
+  //   perror("Error");
+  // }
+
+  // int numLines = 0;
+  // int result3 = CountLines("test", &numLines);
+  // if (result3 < SUCCESS) {
+  //   PrintError(result3);
+  // } else if (result3 > SUCCESS) {
+  //   perror("Error");
+  // }
+  // printf("Number of lines: %d\n", numLines);
+
+  // int result4 = DeleteFile("test");
+  // if (result4 != SUCCESS) {
+  //   perror("Error");
+  // }
+
+  // FileInfo *info = GetFileInfo("test");
+  // if (info == NULL) {
+  //   fprintf(stderr, "Error retrieving file information.\n");
+  //   return 1;
+  // }
+  // printf("File type: %s\n", info->fileType);
+  // printf("Owner: %s\n", info->owner);
+  // printf("Creation time: %s", info->creationTime);
+  // printf("Last access time: %s", info->lastAccessTime);
+  // printf("Last modification time: %s", info->lastModificationTime);
+  // printf("Inode: %ld\n", info->inode);
+
+  // free(info);
 
   return 0;
 }
