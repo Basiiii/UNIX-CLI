@@ -74,19 +74,19 @@ int main() {
   //   perror("Error");
   // }
 
-  FileInfo *info = GetFileInfo("test");
-  if (info == NULL) {
-    fprintf(stderr, "Error retrieving file information.\n");
-    return 1;
-  }
-  printf("File type: %s\n", info->fileType);
-  printf("Owner: %s\n", info->owner);
-  printf("Creation time: %s", info->creationTime);
-  printf("Last access time: %s", info->lastAccessTime);
-  printf("Last modification time: %s", info->lastModificationTime);
-  printf("Inode: %ld\n", info->inode);
+  // FileInfo *info = GetFileInfo("test");
+  // if (info == NULL) {
+  //   fprintf(stderr, "Error retrieving file information.\n");
+  //   return 1;
+  // }
+  // printf("File type: %s\n", info->fileType);
+  // printf("Owner: %s\n", info->owner);
+  // printf("Creation time: %s", info->creationTime);
+  // printf("Last access time: %s", info->lastAccessTime);
+  // printf("Last modification time: %s", info->lastModificationTime);
+  // printf("Inode: %ld\n", info->inode);
 
-  free(info);
+  // free(info);
 
   return 0;
 }
