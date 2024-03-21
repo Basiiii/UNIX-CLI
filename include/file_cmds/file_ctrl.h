@@ -32,6 +32,32 @@
 #ifndef FILE_CTRL_H
 #define FILE_CTRL_H
 
+#include "constants.h"
+
+/**
+ * @brief Structure that holds information of a file.
+ *
+ * The structure includes the following fields:
+ * - `fileType`: The type of the file (e.g., regular file, directory, etc)
+ * - `inode`: A long integer that represents the inode number of the file.
+ * - `owner`: The name of the file's owner.
+ * - `creationTime`: The time the file was created, as a string.
+ * - `lastAccessTime`: The last time the file was accessed, as a string.
+ * - `lastModificationTime`: The last time the file was modified, as a string.
+ *
+ * This structure is designed to encapsulate various pieces of information about
+ * a file, making it easier to manage and manipulate file metadata in a
+ * structured manner.
+ */
+typedef struct FileInfo {
+  char fileType[FILE_INFO_STR_SIZE];             // type of the file
+  long inode;                                    // inode value of the file
+  char owner[FILE_INFO_STR_SIZE];                // name of the file's owner
+  char creationTime[FILE_INFO_STR_SIZE];         // time file was created
+  char lastAccessTime[FILE_INFO_STR_SIZE];       // time file was last accessed
+  char lastModificationTime[FILE_INFO_STR_SIZE]; // time file was last modified
+} FileInfo;
+
 /**
  * @brief Displays the contents of a file to stdout.
  *
@@ -172,5 +198,39 @@ int CountLines(const char *filename, int *numLines);
  * @endcode
  */
 int DeleteFile(const char *filename);
+
+/**
+ * @brief Retrieves and stores various pieces of information about a specified
+ * file.
+ *
+ * This function retrieves file information such as file type, owner, creation
+ * time, last access time, last modification time, and inode number. It
+ * allocates memory for a `FileInfo` struct, fills it with the retrieved
+ * information, and returns a pointer to this struct. If any error occurs during
+ * the process, such as failing to retrieve file information or allocating
+ * memory, the function frees any allocated memory and returns NULL.
+ *
+ * @param filename The name of the file to retrieve information about.
+ * @return A pointer to a `FileInfo` struct containing the file information.
+ * Returns NULL if an error occurs.
+ *
+ * @code{.c}
+ * // Example usage:
+ * FileInfo *info = FileInformation("example.txt");
+ * if (info == NULL) {
+ *     fprintf(stderr, "Error retrieving file information.\n");
+ *     return 1;
+ * }
+ * printf("File type: %s\n", info->fileType);
+ * printf("Owner: %s\n", info->owner);
+ * printf("Creation time: %s", info->creationTime);
+ * printf("Last access time: %s", info->lastAccessTime);
+ * printf("Last modification time: %s", info->lastModificationTime);
+ * printf("Inode: %ld\n", info->inode);
+ * // Remember to free the allocated memory
+ * free(info);
+ * @endcode
+ */
+FileInfo *GetFileInfo(const char *filename);
 
 #endif /* FILE_CTRL_H */

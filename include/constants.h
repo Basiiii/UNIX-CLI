@@ -33,4 +33,7 @@
 /* BUFFERS */
 #define BUFFER_SIZE 4096 // max buffer size
 
+/* FILE INFORMATION */
+#define FILE_INFO_STR_SIZE 50 // size of strings in `FileInfo` structure
+
 #endif /* CONSTANTS_H */

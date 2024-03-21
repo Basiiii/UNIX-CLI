@@ -19,15 +19,22 @@
  * @copyright Copyright (c) 2024
  *
  */
+#define _XOPEN_SOURCE 700
+
 #include <errno.h>
 #include <fcntl.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "constants.h"
 #include "error_codes.h"
+#include "file_ctrl.h"
 
 /**
  * @brief Displays the contents of a file to stdout.
@@ -334,4 +341,86 @@ int DeleteFile(const char *filename) {
   }
 
   return SUCCESS;
+}
+
+/**
+ * @brief Retrieves and stores various pieces of information about a specified
+ * file.
+ *
+ * This function retrieves file information such as file type, owner, creation
+ * time, last access time, last modification time, and inode number. It
+ * allocates memory for a `FileInfo` struct, fills it with the retrieved
+ * information, and returns a pointer to this struct. If any error occurs during
+ * the process, such as failing to retrieve file information or allocating
+ * memory, the function frees any allocated memory and returns NULL.
+ *
+ * @param filename The name of the file to retrieve information about.
+ * @return A pointer to a `FileInfo` struct containing the file information.
+ * Returns NULL if an error occurs.
+ *
+ * @code{.c}
+ * // Example usage:
+ * FileInfo *info = GetFileInfo("example.txt");
+ * if (info == NULL) {
+ *     fprintf(stderr, "Error retrieving file information.\n");
+ *     return 1;
+ * }
+ * printf("File type: %s\n", info->fileType);
+ * printf("Owner: %s\n", info->owner);
+ * printf("Creation time: %s", info->creationTime);
+ * printf("Last access time: %s", info->lastAccessTime);
+ * printf("Last modification time: %s", info->lastModificationTime);
+ * printf("Inode: %ld\n", info->inode);
+ * // Remember to free the allocated memory
+ * free(info);
+ * @endcode
+ */
+FileInfo *GetFileInfo(const char *filename) {
+  struct stat fileStat; // structure to hold stat() function return
+  struct passwd *pw;    // structure to hold user information
+
+  FileInfo *info = (FileInfo *)malloc(sizeof(FileInfo));
+  if (info == NULL) {
+    return NULL; // Memory allocation failure
+  }
+
+  // Retrieve file information
+  if (stat(filename, &fileStat) == -1) {
+    free(info);
+    return NULL;
+  }
+
+  // Determine file type
+  switch (fileStat.st_mode & S_IFMT) {
+  case S_IFREG:
+    strcpy(info->fileType, "regular file");
+    break;
+  case S_IFDIR:
+    strcpy(info->fileType, "directory");
+    break;
+  case S_IFLNK:
+    strcpy(info->fileType, "symbolic link");
+    break;
+  default:
+    strcpy(info->fileType, "unknown");
+    break;
+  }
+
+  // Get the owner's name from user ID
+  pw = getpwuid(fileStat.st_uid);
+  if (pw == NULL) {
+    free(info);
+    return NULL;
+  }
+  strcpy(info->owner, pw->pw_name);
+
+  // Store timestamps
+  strcpy(info->creationTime, ctime(&fileStat.st_ctime));
+  strcpy(info->lastAccessTime, ctime(&fileStat.st_atime));
+  strcpy(info->lastModificationTime, ctime(&fileStat.st_mtime));
+
+  // Store inode number
+  info->inode = fileStat.st_ino;
+
+  return info;
 }

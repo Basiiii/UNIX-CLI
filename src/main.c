@@ -20,6 +20,7 @@
  */
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "constants.h"
@@ -72,6 +73,20 @@ int main() {
   // if (result4 != SUCCESS) {
   //   perror("Error");
   // }
+
+  FileInfo *info = GetFileInfo("test");
+  if (info == NULL) {
+    fprintf(stderr, "Error retrieving file information.\n");
+    return 1;
+  }
+  printf("File type: %s\n", info->fileType);
+  printf("Owner: %s\n", info->owner);
+  printf("Creation time: %s", info->creationTime);
+  printf("Last access time: %s", info->lastAccessTime);
+  printf("Last modification time: %s", info->lastModificationTime);
+  printf("Inode: %ld\n", info->inode);
+
+  free(info);
 
   return 0;
 }

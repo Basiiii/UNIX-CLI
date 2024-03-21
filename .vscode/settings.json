@@ -8,6 +8,7 @@
     "string.h": "c",
     "system_error": "c",
     "constants.h": "c",
-    "stat.h": "c"
+    "stat.h": "c",
+    "alloca.h": "c"
   }
 }
