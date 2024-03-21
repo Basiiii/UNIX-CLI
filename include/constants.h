@@ -27,7 +27,8 @@
 #define VERSION "0.1" // current version number
 
 /* OPERATION RETURN CODES */
-#define SUCCESS 0 // operation success code
+#define SUCCESS 0      // operation success code
+#define NULL_POINTER 1 // null pointer error
 
 /* BUFFERS */
 #define BUFFER_SIZE 4096 // max buffer size

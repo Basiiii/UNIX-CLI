@@ -42,20 +42,29 @@
 int main() {
   printf("Version: %s\n", VERSION);
 
-  int result = ShowFile("test");
-  if (result != SUCCESS) {
-    perror("Error");
-  }
+  // int result = ShowFile("test");
+  // if (result != SUCCESS) {
+  //   perror("Error");
+  // }
 
-  int result1 = CopyFile("test");
-  if (result1 != SUCCESS) {
-    perror("Error");
-  }
+  // int result1 = CopyFile("test");
+  // if (result1 != SUCCESS) {
+  //   perror("Error");
+  // }
 
-  int result2 = AppendFile("source", "dest");
-  if (result2 != SUCCESS) {
+  // int result2 = AppendFile("source", "dest");
+  // if (result2 != SUCCESS) {
+  //   perror("Error");
+  // }
+
+  int numLines = 0;
+  int result3 = CountLines("test", &numLines);
+  if (result3 < SUCCESS) {
+    printf("%d", result3);
+  } else if (result3 > SUCCESS) {
     perror("Error");
   }
+  printf("Number of lines: %d", numLines);
 
   return 0;
 }

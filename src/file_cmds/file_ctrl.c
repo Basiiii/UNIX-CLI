@@ -55,7 +55,7 @@
  * @endcode
  */
 int ShowFile(const char *filename) {
-  // Open the file in read only
+  // Open the file in read-only mode
   int fd = open(filename, O_RDONLY);
   if (fd == -1) {
     return errno;
@@ -181,13 +181,13 @@ int CopyFile(const char *filename) {
  * @endcode
  */
 int AppendFile(const char *source, const char *destination) {
-  // Open source file in read only
+  // Open source file in read-only mode
   int sourcefd = open(source, O_RDONLY);
   if (sourcefd == -1) {
     return errno;
   }
 
-  // Open destination file in read only append mode
+  // Open destination file in read-only append mode
   int destfd = open(destination, O_WRONLY | O_APPEND);
   if (destfd == -1) {
     close(sourcefd);
@@ -217,6 +217,84 @@ int AppendFile(const char *source, const char *destination) {
   // Close files
   close(sourcefd);
   close(destfd);
+
+  return SUCCESS;
+}
+
+/**
+ * @brief Counts the number of lines in a file.
+ *
+ * This function opens the specified file in read-only mode and counts the
+ * number of lines in the file. It reads the file in chunks and increments a
+ * line counter each time a newline character is encountered. The line count is
+ * stored in the memory location pointed to by the `numLines` parameter.
+ *
+ * If the file does not exist or cannot be opened for reading, this function
+ * returns an error code and sets `errno` to the appropriate error code. If the
+ * `numLines` pointer is NULL, the function returns a custom error code
+ * indicating a null pointer error.
+ *
+ * @param filename The name of the file whose lines are to be counted.
+ * @param numLines Pointer to an int where the number of lines will be stored.
+ * @return Returns 0 if successful. If an error occurs, returns an error
+ * code. The specific error code can be obtained by checking `errno`. For a null
+ * pointer error, the function returns a custom error code defined by
+ * `NULL_POINTER`.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int lineCount;
+ * int result = CountLines("example.txt", &lineCount);
+ * if (result != SUCCESS) {
+ *     if (result == NULL_POINTER) {
+ *         fprintf(stderr, "Error: Null pointer provided.\n");
+ *     } else {
+ *         fprintf(stderr, "Error counting lines: %s\n", strerror(errno));
+ *     }
+ *     return 1;
+ * }
+ * printf("Number of lines: %d\n", lineCount);
+ * @endcode
+ */
+int CountLines(const char *filename, int *numLines) {
+  // Check if pointer is NULL
+  if (numLines == NULL) {
+    return NULL_POINTER;
+  }
+
+  // Initialize number of lines
+  *numLines = 0;
+
+  // Open the file in read-only mode
+  int fd = open(filename, O_RDONLY);
+  if (fd == -1) {
+    return errno;
+  }
+
+  // Buffer to store read data
+  char buffer[BUFFER_SIZE];
+  ssize_t bytesRead;
+
+  // Read the file character by character
+  while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0) {
+    // Iterate through buffer and count new lines
+    for (ssize_t i = 0; i < bytesRead; i++) {
+      if (buffer[i] == '\n') {
+        (*numLines)++;
+      }
+    }
+  }
+
+  // Check for read error
+  if (bytesRead == -1) {
+    close(fd);
+    return errno;
+  }
+
+  // Close the file
+  if (close(fd) == -1) {
+    return errno;
+  }
 
   return SUCCESS;
 }
