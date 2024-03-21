@@ -23,12 +23,14 @@
  *
  * @copyright Copyright (c) 2024
  */
-/* GENERAL CONSTANTS */
-#define VERSION "0.1" // current version number
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-/* OPERATION RETURN CODES */
-#define SUCCESS 0      // operation success code
-#define NULL_POINTER 1 // null pointer error
+/* GENERAL CONSTANTS */
+#define PROGRAM_NAME "UNIX-Sys-Control" // program name
+#define VERSION "0.1"                   // current version number
 
 /* BUFFERS */
 #define BUFFER_SIZE 4096 // max buffer size
+
+#endif /* CONSTANTS_H */

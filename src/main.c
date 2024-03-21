@@ -23,7 +23,9 @@
 #include <string.h>
 
 #include "constants.h"
+#include "error_codes.h"
 #include "file_ctrl.h"
+#include "handle_errors.h"
 
 /**
  * @brief Main entry point of the program.
@@ -40,7 +42,7 @@
  * @return int Returns 0 upon successful execution.
  */
 int main() {
-  printf("Version: %s\n", VERSION);
+  printf("%s version %s.\n\n", PROGRAM_NAME, VERSION);
 
   // int result = ShowFile("test");
   // if (result != SUCCESS) {
@@ -60,11 +62,11 @@ int main() {
   int numLines = 0;
   int result3 = CountLines("test", &numLines);
   if (result3 < SUCCESS) {
-    printf("%d", result3);
+    PrintError(result3);
   } else if (result3 > SUCCESS) {
     perror("Error");
   }
-  printf("Number of lines: %d", numLines);
+  printf("Number of lines: %d\n", numLines);
 
   return 0;
 }

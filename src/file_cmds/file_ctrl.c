@@ -27,6 +27,7 @@
 #include <unistd.h>
 
 #include "constants.h"
+#include "error_codes.h"
 
 /**
  * @brief Displays the contents of a file to stdout.
