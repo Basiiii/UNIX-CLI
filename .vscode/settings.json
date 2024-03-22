@@ -9,6 +9,7 @@
     "system_error": "c",
     "constants.h": "c",
     "stat.h": "c",
-    "alloca.h": "c"
+    "alloca.h": "c",
+    "dirent.h": "c"
   }
 }
