@@ -21,6 +21,7 @@
  */
 #define _XOPEN_SOURCE 700
 
+#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <pwd.h>
@@ -118,7 +119,7 @@ int ShowFile(const char *filename) {
  */
 int CopyFile(const char *filename) {
   // TODO: Nome do ficheiro literalmente `ficheiro.copia`?
-  // TODO: Diretoria do ficheiro na dir atual ou permitimos que o utilizador
+  // TODO: Copia do ficheiro vai para a dir atual ou permitimos que o utilizador
   // possa escolher?
   // TODO: Podemos utilizar perror() para apresentar o erro ao utilizador?
 
@@ -423,4 +424,69 @@ FileInfo *GetFileInfo(const char *filename) {
   info->inode = fileStat.st_ino;
 
   return info;
+}
+
+/**
+ * @brief Lists the contents of a directory.
+ *
+ * This function lists all files and directories in the specified directory or
+ * in the current directory if not specified. It distinguishes between regular
+ * files and directories, printing their names along with a textual indication
+ * of their type.
+ *
+ * If the specified directory cannot be opened or an error occurs while reading
+ * its contents, the function returns the corresponding error code stored in
+ * errno.
+ *
+ * @param directory The path of the directory whose contents are to be listed.
+ * @return Returns a success code if the directory contents are successfully
+ * listed. If an error occurs, returns the error code stored in errno. See the
+ * errno.h header file for possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = ListDir("/path/to/directory");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error listing directory contents: %s\n",
+ *             strerror(result)); return 1;
+ * }
+ * @endcode
+ */
+int ListDir(const char *directory) {
+  DIR *dir;             // directory pointer
+  struct dirent *entry; // directory entry structure
+  struct stat fileStat; // file stat structure
+
+  // Open the specified directory
+  dir = opendir(directory);
+  if (dir == NULL) {
+    return errno;
+  }
+
+  // Read directory entries
+  while ((entry = readdir(dir)) != NULL) {
+    // Ignore "." and ".." entries
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+      continue;
+
+    // Obtain file status
+    if (fstatat(dirfd(dir), entry->d_name, &fileStat, 0) < 0) {
+      closedir(dir);
+      return errno;
+    }
+
+    // TODO: podemos listar diretamente ou precisamos de retornar?
+    // Check if it's a directory or a file
+    if (S_ISDIR(fileStat.st_mode))
+      printf("%s [diretoria]\n", entry->d_name);
+    else
+      printf("%s [ficheiro]\n", entry->d_name);
+  }
+
+  // Close directory
+  if (closedir(dir) == -1) {
+    return errno;
+  }
+
+  return SUCCESS;
 }

@@ -233,4 +233,32 @@ int DeleteFile(const char *filename);
  */
 FileInfo *GetFileInfo(const char *filename);
 
+/**
+ * @brief Lists the contents of a directory.
+ *
+ * This function lists all files and directories in the specified directory or
+ * in the current directory if not specified. It distinguishes between regular
+ * files and directories, printing their names along with a textual indication
+ * of their type.
+ *
+ * If the specified directory cannot be opened or an error occurs while reading
+ * its contents, the function returns the corresponding error code stored in
+ * errno.
+ *
+ * @param directory The path of the directory whose contents are to be listed.
+ * @return Returns a success code if the directory contents are successfully
+ * listed. If an error occurs, returns the error code stored in errno. See the
+ * errno.h header file for possible error codes.
+ *
+ * @code{.c}
+ * // Example usage:
+ * int result = ListDir("/path/to/directory");
+ * if (result != SUCCESS) {
+ *     fprintf(stderr, "Error listing directory contents: %s\n",
+ *             strerror(result)); return 1;
+ * }
+ * @endcode
+ */
+int ListDir(const char *directory);
+
 #endif /* FILE_CTRL_H */
