@@ -10,6 +10,7 @@
     "constants.h": "c",
     "stat.h": "c",
     "alloca.h": "c",
-    "dirent.h": "c"
+    "dirent.h": "c",
+    "fcntl.h": "c"
   }
 }

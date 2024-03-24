@@ -45,20 +45,18 @@
  * writes them to stdout until the end of file is reached.
  *
  * If the file does not exist or cannot be opened for reading, this function
- * returns the corresponding error code stored in errno. You can use the
- * strerror() function to convert the error code to a human-readable error
- * message.
+ * prints the error using perror() from the errno.h header and returns a failure
+ * error code.
  *
  * @param filename The name of the file who's content is to be displayed.
  * @return Returns a success code if the file is successfully displayed. If an
- * error occurs, returns the error code stored in errno. See the errno.h header
- * file for possible error codes.
+ * error occurs, prints the error using perror (see the errno.h header for more
+ * information) and returns failure error code.
  *
  * @code{.c}
  * // Example usage:
  * int result = ShowFile("example.txt");
  * if (result != SUCCESS) {
- *     fprintf(stderr, "Error displaying file: %s\n", strerror(result));
  *     return 1;
  * }
  * @endcode
@@ -67,7 +65,8 @@ int ShowFile(const char *filename) {
   // Open the file in read-only mode
   int fd = open(filename, O_RDONLY);
   if (fd == -1) {
-    return errno;
+    perror("Error");
+    return FAILURE;
   }
 
   // Read and output the contents of the file
@@ -77,19 +76,22 @@ int ShowFile(const char *filename) {
     if (write(STDOUT_FILENO, buffer, bytes_read) != bytes_read) {
       // If there is an error writing to stdout, close the file and return errno
       close(fd);
-      return errno;
+      perror("Error");
+      return FAILURE;
     }
   }
 
   // Check for read error
   if (bytes_read == -1) {
     close(fd);
-    return errno;
+    perror("Error");
+    return FAILURE;
   }
 
   // Close the file
   if (close(fd) == -1) {
-    return errno;
+    perror("Error");
+    return FAILURE;
   }
 
   return SUCCESS;
@@ -118,11 +120,6 @@ int ShowFile(const char *filename) {
  * @endcode
  */
 int CopyFile(const char *filename) {
-  // TODO: Nome do ficheiro literalmente `ficheiro.copia`?
-  // TODO: Copia do ficheiro vai para a dir atual ou permitimos que o utilizador
-  // possa escolher?
-  // TODO: Podemos utilizar perror() para apresentar o erro ao utilizador?
-
   // Open the source file in read-only mode
   int srcfd = open(filename, O_RDONLY);
   if (srcfd == -1) {
@@ -131,6 +128,7 @@ int CopyFile(const char *filename) {
 
   // Create or truncate the destination file and set its permissions to match
   // the source file
+  // TODO: Concatenar filename + ".copia" para colocar como nome do ficheiro
   int destfd =
       open("ficheiro.copia", O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   if (destfd == -1) {
@@ -455,7 +453,6 @@ FileInfo *GetFileInfo(const char *filename) {
 int ListDir(const char *directory) {
   DIR *dir;             // directory pointer
   struct dirent *entry; // directory entry structure
-  struct stat fileStat; // file stat structure
 
   // Open the specified directory
   dir = opendir(directory);
@@ -463,24 +460,16 @@ int ListDir(const char *directory) {
     return errno;
   }
 
+  // Print the directory name
+  printf("%s [diretoria]\n", directory);
+
   // Read directory entries
   while ((entry = readdir(dir)) != NULL) {
     // Ignore "." and ".." entries
     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
       continue;
 
-    // Obtain file status
-    if (fstatat(dirfd(dir), entry->d_name, &fileStat, 0) < 0) {
-      closedir(dir);
-      return errno;
-    }
-
-    // TODO: podemos listar diretamente ou precisamos de retornar?
-    // Check if it's a directory or a file
-    if (S_ISDIR(fileStat.st_mode))
-      printf("%s [diretoria]\n", entry->d_name);
-    else
-      printf("%s [ficheiro]\n", entry->d_name);
+    printf("%s [ficheiro]\n", entry->d_name);
   }
 
   // Close directory

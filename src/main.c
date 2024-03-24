@@ -21,14 +21,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "constants.h"
 #include "error_codes.h"
 #include "file_ctrl.h"
 #include "handle_errors.h"
-#include <sys/types.h>
+#include "parser.h"
 
 /**
  * @brief Main entry point of the program.
@@ -57,27 +57,29 @@ int main() {
 
     // Read user input
     bytesRead = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
-    if (bytesRead <= 0) {
-      perror("Erro");
-      return 1;
+    if (bytesRead < 0) {
+      perror("Error");
+      return FAILURE;
+    } else if (bytesRead == 0) {
+      // No input received, ignore and continue
+      continue;
     }
 
     // Null-terminate the string
     buffer[bytesRead - 1] = '\0';
 
     // Check for termination
-    if (strncmp(buffer, "termina", strlen("termina")) == 0) {
+    if (strncmp(buffer, EXIT_CMD, strlen(EXIT_CMD)) == 0) {
       break; // Exit the loop
     }
 
-    // Echo the input back to the user
-    printf("echo: %s\n", buffer);
+    // Check if the buffer is empty
+    if (strlen(buffer) == 0) {
+      continue; // Skip parsing if the buffer is empty
+    }
 
-    // Parse input and look for commands
-
-    // Create process
-
-    // Call specific function with params on new process
+    // Parse and execute command
+    ParseAndExecuteCommand(buffer);
   }
 
   return 0;

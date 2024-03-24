@@ -66,20 +66,18 @@ typedef struct FileInfo {
  * writes them to stdout until the end of file is reached.
  *
  * If the file does not exist or cannot be opened for reading, this function
- * returns the corresponding error code stored in errno. You can use the
- * strerror() function to convert the error code to a human-readable error
- * message.
+ * prints the error using perror() from the errno.h header and returns a failure
+ * error code.
  *
  * @param filename The name of the file who's content is to be displayed.
  * @return Returns a success code if the file is successfully displayed. If an
- * error occurs, returns the error code stored in errno. See the errno.h header
- * file for possible error codes.
+ * error occurs, prints the error using perror (see the errno.h header for more
+ * information) and returns failure error code.
  *
  * @code{.c}
  * // Example usage:
  * int result = ShowFile("example.txt");
  * if (result != SUCCESS) {
- *     fprintf(stderr, "Error displaying file: %s\n", strerror(result));
  *     return 1;
  * }
  * @endcode
