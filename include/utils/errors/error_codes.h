@@ -28,11 +28,14 @@
 #ifndef ERROR_CODES_H
 #define ERROR_CODES_H
 
-/* SUCCESS RETURN CODE */
+/* GENERAL SUCCESS */
 #define SUCCESS 0 // operation success code
 
+/* GENERAL FAILURE */
+#define FAILURE 1 // operation failure code
+
 /* MEMORY ERRORS */
-#define NULL_POINTER 1 // null pointer error
+#define NULL_POINTER 2 // null pointer error
 
 /* ERROR CODE MESSAGES */
 #define DEFAULT_ERROR_MSG "Ocorreu um erro desconhecido.\n"
