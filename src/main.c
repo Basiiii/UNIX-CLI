@@ -22,10 +22,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <unistd.h>
+
 #include "constants.h"
 #include "error_codes.h"
 #include "file_ctrl.h"
 #include "handle_errors.h"
+#include <sys/types.h>
 
 /**
  * @brief Main entry point of the program.
@@ -43,6 +46,39 @@
  */
 int main() {
   printf("%s version %s.\n\n", PROGRAM_NAME, VERSION);
+
+  char buffer[BUFFER_SIZE];
+  ssize_t bytesRead;
+
+  while (1) {
+    // Print a prompt
+    printf("%% ");
+    fflush(stdout); // Ensure the prompt is displayed
+
+    // Read user input
+    bytesRead = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
+    if (bytesRead <= 0) {
+      perror("Erro");
+      return 1;
+    }
+
+    // Null-terminate the string
+    buffer[bytesRead - 1] = '\0';
+
+    // Check for termination
+    if (strncmp(buffer, "termina", strlen("termina")) == 0) {
+      break; // Exit the loop
+    }
+
+    // Echo the input back to the user
+    printf("echo: %s\n", buffer);
+
+    // Parse input and look for commands
+
+    // Create process
+
+    // Call specific function with params on new process
+  }
 
   return 0;
 }
