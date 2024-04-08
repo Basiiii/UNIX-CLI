@@ -53,7 +53,7 @@ int main() {
   while (1) {
     // Print a prompt
     printf("%% ");
-    fflush(stdout); // Ensure the prompt is displayed
+    fflush(stdout);  // Ensure the prompt is displayed
 
     // Read user input
     bytesRead = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
@@ -70,12 +70,12 @@ int main() {
 
     // Check for termination
     if (strncmp(buffer, EXIT_CMD, strlen(EXIT_CMD)) == 0) {
-      break; // Exit the loop
+      break;  // Exit the loop
     }
 
     // Check if the buffer is empty
     if (strlen(buffer) == 0) {
-      continue; // Skip parsing if the buffer is empty
+      continue;  // Skip parsing if the buffer is empty
     }
 
     // Parse and execute command

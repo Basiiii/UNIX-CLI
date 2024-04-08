@@ -21,6 +21,8 @@
  */
 #define _XOPEN_SOURCE 700
 
+#include "file_ctrl.h"
+
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -35,7 +37,6 @@
 
 #include "constants.h"
 #include "error_codes.h"
-#include "file_ctrl.h"
 
 /**
  * @brief Displays the contents of a file to stdout.
@@ -70,7 +71,7 @@ int ShowFile(const char *filename) {
   }
 
   // Read and output the contents of the file
-  char buffer[BUFFER_SIZE]; // Buffer to store read data
+  char buffer[BUFFER_SIZE];  // Buffer to store read data
   ssize_t bytes_read;
   while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
     if (write(STDOUT_FILENO, buffer, bytes_read) != bytes_read) {
@@ -375,12 +376,12 @@ int DeleteFile(const char *filename) {
  * @endcode
  */
 FileInfo *GetFileInfo(const char *filename) {
-  struct stat fileStat; // structure to hold stat() function return
-  struct passwd *pw;    // structure to hold user information
+  struct stat fileStat;  // structure to hold stat() function return
+  struct passwd *pw;     // structure to hold user information
 
   FileInfo *info = (FileInfo *)malloc(sizeof(FileInfo));
   if (info == NULL) {
-    return NULL; // Memory allocation failure
+    return NULL;  // Memory allocation failure
   }
 
   // Retrieve file information
@@ -391,18 +392,18 @@ FileInfo *GetFileInfo(const char *filename) {
 
   // Determine file type
   switch (fileStat.st_mode & S_IFMT) {
-  case S_IFREG:
-    strcpy(info->fileType, "regular file");
-    break;
-  case S_IFDIR:
-    strcpy(info->fileType, "directory");
-    break;
-  case S_IFLNK:
-    strcpy(info->fileType, "symbolic link");
-    break;
-  default:
-    strcpy(info->fileType, "unknown");
-    break;
+    case S_IFREG:
+      strcpy(info->fileType, "regular file");
+      break;
+    case S_IFDIR:
+      strcpy(info->fileType, "directory");
+      break;
+    case S_IFLNK:
+      strcpy(info->fileType, "symbolic link");
+      break;
+    default:
+      strcpy(info->fileType, "unknown");
+      break;
   }
 
   // Get the owner's name from user ID
@@ -436,7 +437,9 @@ FileInfo *GetFileInfo(const char *filename) {
  * its contents, the function returns the corresponding error code stored in
  * errno.
  *
- * @param directory The path of the directory whose contents are to be listed.
+ * @param directory (Optional) The path of the directory whose contents are to
+ * be listed. If an empty string is passed, the function lists the contents of
+ * the current directory.
  * @return Returns a success code if the directory contents are successfully
  * listed. If an error occurs, returns the error code stored in errno. See the
  * errno.h header file for possible error codes.
@@ -451,8 +454,13 @@ FileInfo *GetFileInfo(const char *filename) {
  * @endcode
  */
 int ListDir(const char *directory) {
-  DIR *dir;             // directory pointer
-  struct dirent *entry; // directory entry structure
+  // If directory is an empty string, use the current directory
+  if (strlen(directory) == 0) {
+    directory = ".";
+  }
+
+  DIR *dir;              // directory pointer
+  struct dirent *entry;  // directory entry structure
 
   // Open the specified directory
   dir = opendir(directory);
