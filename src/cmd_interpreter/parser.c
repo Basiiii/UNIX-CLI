@@ -10,33 +10,16 @@
  * @copyright Copyright (c) 2024
  *
  */
+#include "parser.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "error_codes.h"
 #include "file_ctrl.h"
-#include "parser.h"
+#include "parse_args.h"
 #include "utils.h"
-
-/**
- * @brief Parses the arguments for the ShowFile command.
- *
- * This function parses the arguments provided to the ShowFile command. It finds
- * the first space character in the arguments string and replaces it with a null
- * terminator, effectively separating the command name from the filename.
- *
- * @param args The string containing the arguments for the ShowFile command.
- */
-static void ParseShowFile(char *args) {
-  // Find the first space character
-  char *space_ptr = strchr(args, ' ');
-
-  // If a space is found, replace it with null terminator
-  if (space_ptr != NULL) {
-    *space_ptr = '\0';
-  }
-}
 
 /**
  * @brief Array of Command structures.
@@ -66,10 +49,10 @@ Command commands[] = {
  * returns NULL.
  */
 static Command *IdentifyCommand(const char *input) {
-  char *saveptr; // Pointer to maintain context for strtok_r
+  char *saveptr;  // Pointer to maintain context for strtok_r
   char *command =
       strtok_r((char *)input, " ",
-               &saveptr); // Split the input string at the first space
+               &saveptr);  // Split the input string at the first space
 
   for (size_t i = 0; i < NUM_COMMANDS; i++) {
     if (strcmp(command, commands[i].name) == 0) {
@@ -78,7 +61,7 @@ static Command *IdentifyCommand(const char *input) {
   }
 
   printf("Unknown command: %s\n", command);
-  return NULL; // Return NULL if command is not found
+  return NULL;  // Return NULL if command is not found
 }
 
 /**
@@ -103,7 +86,7 @@ void ParseAndExecuteCommand(const char *input) {
 
   Command *cmd = IdentifyCommand(input);
   if (cmd) {
-    cmd->parseFunc(args); // Call parsing function
-    cmd->func(args);      // Call command function
+    cmd->parseFunc(args);  // Call parsing function
+    cmd->func(args);       // Call command function
   }
 }

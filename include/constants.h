@@ -27,14 +27,14 @@
 #define CONSTANTS_H
 
 /* GENERAL CONSTANTS */
-#define PROGRAM_NAME "UNIX-Sys-Control" // program name
-#define VERSION "0.1"                   // current version number
-#define EXIT_CMD "termina"              // command to exit CLI
+#define PROGRAM_NAME "UNIX-CLI"  // program name
+#define VERSION "0.1"            // current version number
+#define EXIT_CMD "termina"       // command to exit CLI
 
 /* BUFFERS */
-#define BUFFER_SIZE 4096 // max buffer size
+#define BUFFER_SIZE 4096  // max buffer size
 
 /* FILE INFORMATION */
-#define FILE_INFO_STR_SIZE 50 // size of strings in `FileInfo` structure
+#define FILE_INFO_STR_SIZE 50  // size of strings in `FileInfo` structure
 
 #endif /* CONSTANTS_H */
