@@ -10,7 +10,7 @@ INCLUDE_DIR = include
 BUILD_DIR = build
 
 # Program name
-PROGRAM_NAME = sys-ctrl
+PROGRAM_NAME = unix-cli
 
 # Find all source files recursively in src/
 SOURCES := $(shell find $(SRC_DIR) -type f -name '*.c')

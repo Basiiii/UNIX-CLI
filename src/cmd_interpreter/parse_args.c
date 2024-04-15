@@ -33,3 +33,22 @@ void ParseShowFile(char *args) {
     *space_ptr = '\0';
   }
 }
+
+/**
+ * @brief Parses the arguments for the ShowDir command.
+ *
+ * This function parses the arguments provided to the ShowDir command. It finds
+ * the first space character in the arguments string and replaces it with a null
+ * terminator, effectively separating the command name from the filename.
+ *
+ * @param args The string containing the arguments for the ShowDir command.
+ */
+void ParseShowDir(char *args) {
+  // Find the first space character
+  char *space_ptr = strchr(args, ' ');
+
+  // If a space is found, replace it with null terminator
+  if (space_ptr != NULL) {
+    *space_ptr = '\0';
+  }
+}
