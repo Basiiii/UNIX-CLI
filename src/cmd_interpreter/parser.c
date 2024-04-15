@@ -22,6 +22,14 @@
 #include "utils.h"
 
 /**
+ * @brief A function that does nothing.
+ *
+ * This function is used as a placeholder for the parsing function in the
+ * command structure when no specific parsing is required.
+ */
+static void NoParsing() {}
+
+/**
  * @brief Array of Command structures.
  *
  * This array contains the definitions of various commands available in the
@@ -30,6 +38,7 @@
  */
 Command commands[] = {
     {"show", ParseShowFile, ShowFile},
+    {"ls", ParseShowDir, ListDir},
 };
 
 /**
@@ -84,9 +93,13 @@ void ParseAndExecuteCommand(const char *input) {
   // Get the rest of the string as arguments
   char *args = strtok_r(NULL, "", &saveptr);
 
+  if (args == NULL) {
+    args = "";  // Set args to an empty string
+  }
+
   Command *cmd = IdentifyCommand(input);
   if (cmd) {
-    cmd->parseFunc(args);  // Call parsing function
+    cmd->parseFunc(args);  // Call parsing function)
     cmd->func(args);       // Call command function
   }
 }

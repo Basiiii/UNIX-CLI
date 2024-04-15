@@ -22,4 +22,15 @@
  */
 void ParseShowFile(char *args);
 
+/**
+ * @brief Parses the arguments for the ShowDir command.
+ *
+ * This function parses the arguments provided to the ShowDir command. It finds
+ * the first space character in the arguments string and replaces it with a null
+ * terminator, effectively separating the command name from the filename.
+ *
+ * @param args The string containing the arguments for the ShowDir command.
+ */
+void ParseShowDir(char *args);
+
 #endif /* PARSE_ARGS_H */

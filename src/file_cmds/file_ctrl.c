@@ -454,8 +454,8 @@ FileInfo *GetFileInfo(const char *filename) {
  * @endcode
  */
 int ListDir(const char *directory) {
-  // If directory is an empty string, use the current directory
-  if (strlen(directory) == 0) {
+  // If directory is an empty string or NULL, default to current directory
+  if (strlen(directory) == 0 || directory == NULL) {
     directory = ".";
   }
 
@@ -469,7 +469,7 @@ int ListDir(const char *directory) {
   }
 
   // Print the directory name
-  printf("%s [diretoria]\n", directory);
+  printf("%-30s\t[diretoria]\n", directory);
 
   // Read directory entries
   while ((entry = readdir(dir)) != NULL) {
@@ -477,7 +477,7 @@ int ListDir(const char *directory) {
     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
       continue;
 
-    printf("%s [ficheiro]\n", entry->d_name);
+    printf("%-30s\t[ficheiro]\n", entry->d_name);
   }
 
   // Close directory
