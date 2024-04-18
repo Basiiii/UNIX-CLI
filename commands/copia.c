@@ -1,12 +1,14 @@
 /**
  * @file copia.c
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
- * @brief
+ * @brief Creates a copy of the specified file.
+ *
+ * This program utility creates a new file named "ficheiro.copia" with the
+ * content copied from the specified file. If the specified file does not exist
+ * or cannot be opened for reading, the utility program returns 1.
+ *
  * @version 0.1
  * @date 2024-04-18
- *
- * @copyright Copyright (c) 2024
- *
  */
 #define _XOPEN_SOURCE 700
 
@@ -23,7 +25,7 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *source_file_name;
+static char const *src_file_name;
 
 /* Name of destination file. */
 static char *dest_file_name;
@@ -41,9 +43,10 @@ static char *dest_file_name;
 /**
  * @brief Creates a copy of the specified file.
  *
- * This function creates a new file named "ficheiro.copia" with the content
- * copied from the specified file. If the specified file does not exist or
- * cannot be opened for reading, the utility program returns 1.
+ * This program utility creates a new file named "ficheiro.copia" with the
+ * content copied from the specified file. If the specified file does not exist
+ * or cannot be opened for reading, the program prints the error using perror()
+ * from the errno.h header and returns 1.
  *
  * @param argc The number of command-line arguments passed to the program.
  * @param argv An array of strings containing the command-line arguments.
@@ -67,22 +70,21 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Set `sourcefilename` to given name
-  source_file_name = argv[1];
+  src_file_name = argv[1];
 
   // Allocate memory for dest_file_name
-  dest_file_name =
-      (char *)malloc(strlen(source_file_name) + strlen(".copia") + 1);
+  dest_file_name = (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
   if (dest_file_name == NULL) {
     fputs("Error: Memory allocation failed.\n", stderr);
     return EXIT_FAILURE;
   }
 
   // Concatenate ".copia" to the end of dest_file_name
-  strcpy(dest_file_name, source_file_name);
+  strcpy(dest_file_name, src_file_name);
   strcat(dest_file_name, ".copia");
 
   // Open the source file in read-only mode
-  int srcfd = open(source_file_name, O_RDONLY);
+  int srcfd = open(src_file_name, O_RDONLY);
   if (srcfd == -1) {
     perror("Error");
     return EXIT_FAILURE;
@@ -103,18 +105,18 @@ int main(const int argc, const char *argv[]) {
   while ((bytes_read = read(srcfd, buffer, sizeof(buffer))) > 0) {
     ssize_t bytes_written = write(destfd, buffer, bytes_read);
     if (bytes_written != bytes_read) {
+      perror("Error");
       close(srcfd);
       close(destfd);
-      perror("Error");
       return EXIT_FAILURE;
     }
   }
 
   // Check for read error
   if (bytes_read == -1) {
+    perror("Error:");
     close(srcfd);
     close(destfd);
-    perror("Error:");
     return EXIT_FAILURE;
   }
 

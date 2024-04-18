@@ -1,21 +1,18 @@
 /**
  * @file mostra.c
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
- * @brief Display the contents of a file to stdout.
+ * @brief Displays the contents of a file to stdout.
  *
- * This utility opens the specified file in read-only mode and displays its
+ * This program opens the specified file in read-only mode and displays its
  * contents to the standard output (stdout). It reads the file in chunks and
  * writes them to stdout until the end of file is reached.
  *
- * If the file does not exist or cannot be opened for reading, this function
+ * If the file does not exist or cannot be opened for reading, this program
  * prints the error using perror() from the errno.h header and returns a failure
  * error code.
  *
  * @version 0.1
  * @date 2024-04-18
- *
- * @copyright Copyright (c) 2024
- *
  */
 #define _XOPEN_SOURCE 700
 
@@ -32,7 +29,7 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *source_file_name;
+static char const *src_file_name;
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                 \
@@ -47,11 +44,11 @@ static char const *source_file_name;
 /**
  * @brief Displays the contents of a file to stdout.
  *
- * This function opens the specified file in read-only mode and displays its
+ * This program opens the specified file in read-only mode and displays its
  * contents to the standard output (stdout). It reads the file in chunks and
  * writes them to stdout until the end of file is reached.
  *
- * If the file does not exist or cannot be opened for reading, this function
+ * If the file does not exist or cannot be opened for reading, this program
  * prints the error using perror() from the errno.h header and returns a failure
  * error code.
  *
@@ -77,10 +74,10 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Set filename to given name
-  source_file_name = argv[1];
+  src_file_name = argv[1];
 
   // Open the file in read-only mode
-  int fd = open(source_file_name, O_RDONLY);
+  int fd = open(src_file_name, O_RDONLY);
   if (fd == -1) {
     perror("Error");
     return EXIT_FAILURE;
