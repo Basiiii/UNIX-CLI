@@ -12,7 +12,9 @@
  * @version 0.2
  * @date 2024-03-20
  *
- * @copyright Copyright (c) 2024
+ * @section Modifications
+ * - 2024-04-18: Updated program to v0.2, documented on the Github repo.
+ *   Enrique George Rodrigues (a28602@alunos.ipca.pt)
  *
  */
 #define _XOPEN_SOURCE 700
