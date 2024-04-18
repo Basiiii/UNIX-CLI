@@ -5,44 +5,65 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -std=c99 -D_POSIX_C_SOURCE=200112L
 
 # Directories
-SRC_DIR = src
-INCLUDE_DIR = include
 BUILD_DIR = build
+COMMANDS_DIR = commands
+CLI_DIR = CLI
+INCLUDE_DIR = $(CLI_DIR)/include
+SRC_DIR = $(CLI_DIR)/src
 
 # Program name
 PROGRAM_NAME = unix-cli
 
-# Find all source files recursively in src/
-SOURCES := $(shell find $(SRC_DIR) -type f -name '*.c')
+# Find all source files in commands/
+COMMAND_SOURCES := $(wildcard $(COMMANDS_DIR)/*.c)
 
-# Find all header files recursively in include/
-HEADERS := $(shell find $(INCLUDE_DIR) -type f -name '*.h' -exec dirname {} \; | uniq)
+# Object files for commands
+COMMAND_OBJECTS := $(patsubst $(COMMANDS_DIR)/%.c,$(BUILD_DIR)/commands/%.o,$(COMMAND_SOURCES))
 
-# Object files
-OBJECTS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SOURCES))
+# Source files for the main program in CLI/
+CLI_SOURCES := $(wildcard $(SRC_DIR)/*.c)
 
-# Create necessary directories for object files
-OBJECT_DIRS := $(sort $(dir $(OBJECTS)))
+# Header files for the main program in CLI/
+CLI_HEADERS := $(wildcard $(INCLUDE_DIR)/*.h)
 
-# Executable name
-EXECUTABLE = $(BUILD_DIR)/$(PROGRAM_NAME)
+# Object files for the main program
+CLI_OBJECTS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(CLI_SOURCES))
 
 # Default rule to build the executable
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+$(PROGRAM_NAME): cli commands
 
-# Rule to compile each source file into object files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS) | $(OBJECT_DIRS)
-	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) $(patsubst %,-I%,$(HEADERS)) -c $< -o $@
+# Rule to compile the CLI
+.PHONY: cli
+cli: $(CLI_OBJECTS)
+	$(CC) $(CFLAGS) $(CLI_OBJECTS) -o $(BUILD_DIR)/$(PROGRAM_NAME)
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(CLI_HEADERS) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) $< -c -o $@
+
+# Rule to compile each .c file in commands folder into separate executables
+.PHONY: commands
+commands: $(COMMAND_OBJECTS)
+	@for obj in $(COMMAND_OBJECTS); do \
+		exe=$$(basename $$obj .o); \
+		echo "Linking $$exe from $$obj"; \
+		$(CC) $(CFLAGS) $$obj -o $(BUILD_DIR)/commands/$$exe; \
+	done
+
+# Pattern rule to compile .c files in commands directory into .o files
+$(BUILD_DIR)/commands/%.o: $(COMMANDS_DIR)/%.c | $(BUILD_DIR)/commands
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) $< -c -o $@
 
 # Create build directories if they don't exist
-$(OBJECT_DIRS):
+$(BUILD_DIR)/commands:
+	mkdir -p $@
+
+$(BUILD_DIR):
 	mkdir -p $@
 
 # Rule to clean the project
 .PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR)
 
 # Delete build directory
 .PHONY: cleanall

@@ -30,6 +30,7 @@
 #define PROGRAM_NAME "UNIX-CLI"  // program name
 #define VERSION "0.1"            // current version number
 #define EXIT_CMD "termina"       // command to exit CLI
+#define MAX_ARGS 64              // maximum number of arguments
 
 /* BUFFERS */
 #define BUFFER_SIZE 4096  // max buffer size
