@@ -11,6 +11,7 @@
     "stat.h": "c",
     "alloca.h": "c",
     "dirent.h": "c",
-    "fcntl.h": "c"
+    "fcntl.h": "c",
+    "utils.h": "c"
   }
 }

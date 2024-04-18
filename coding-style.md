@@ -6,8 +6,8 @@ This document outlines the coding standards and guidelines to be followed in the
 
 ## 2. Naming Conventions
 
-- Functions: `FunctionsLikeThis()`
-- Variables: `variablesLikeThis`
+- Functions: `functionsLikeThis()`
+- Variables: `variables_like_this`
 - Constants: `CONSTANTS_LIKE_THIS`
 - Enums: `EnumLikeThis`
 - Structs: `StructsLikeThis`
@@ -22,7 +22,7 @@ This document outlines the coding standards and guidelines to be followed in the
 
 ## 4. Coding Practices
 
-- Follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) for general formatting and style, except for naming conventions.
+- Follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) for general formatting and style.
 - Use meaningful variable and function names.
 - Write clear and concise code. Avoid unnecessary complexity.
 
