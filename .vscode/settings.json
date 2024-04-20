@@ -12,6 +12,7 @@
     "alloca.h": "c",
     "dirent.h": "c",
     "fcntl.h": "c",
-    "utils.h": "c"
+    "utils.h": "c",
+    "cerrno": "c"
   }
 }
