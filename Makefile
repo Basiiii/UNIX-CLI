@@ -20,7 +20,7 @@ COMMAND_SOURCES := $(wildcard $(COMMANDS_DIR)/*.c)
 # Object files for commands
 COMMAND_OBJECTS := $(patsubst $(COMMANDS_DIR)/%.c,$(BUILD_DIR)/commands/%.o,$(COMMAND_SOURCES))
 
-# Source files for the main program in CLI/
+# Find all source files in CLI/src/
 CLI_SOURCES := $(wildcard $(SRC_DIR)/*.c)
 
 # Header files for the main program in CLI/

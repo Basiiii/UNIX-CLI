@@ -16,6 +16,10 @@
  * - 2024-04-18: Updated program to v0.2, documented on the Github repo.
  *   Enrique George Rodrigues (a28602@alunos.ipca.pt)
  *
+ * - 2024-04-22: CLI tries to execute as a file first and if it fails it looks
+ *               in the users PATH variable.
+ *   Enrique George Rodrigues (a28602@alunos.ipca.pt)
+ *
  */
 #define _XOPEN_SOURCE 700
 
@@ -28,6 +32,10 @@
 #include <unistd.h>
 
 #include "constants.h"
+#include "execute.h"
+#include "find.h"
+#include "input_parser.h"
+#include "utils.h"
 
 /**
  * @brief Main entry point of the program.
@@ -42,7 +50,8 @@ int main() {
 
   char buffer[BUFFER_SIZE];
   ssize_t bytes_read;
-  char *args[MAX_ARGS];  // Array to hold arguments
+  char *args[MAX_ARGS];
+  char command_path[BUFFER_SIZE];
   int arg_count;
 
   while (1) {
@@ -63,64 +72,31 @@ int main() {
     // Null-terminate the string
     buffer[bytes_read - 1] = '\0';
 
-    // Check for termination
-    if (strncmp(buffer, EXIT_CMD, strlen(EXIT_CMD)) == 0) {
-      return EXIT_SUCCESS;  // Terminate the program
+    // Check if user wants to end the program
+    if (should_exit(buffer)) {
+      exit(EXIT_SUCCESS);
     }
 
-    // Split the input string into tokens
-    args[0] = strtok(buffer, " ");
-    arg_count = 1;
-    while ((args[arg_count] = strtok(NULL, " ")) != NULL &&
-           arg_count < MAX_ARGS - 1) {
-      arg_count++;
-    }
-    args[arg_count] = NULL;  // Ensure the last argument is NULL
-
-    // Search for the command in the PATH
-    char *path = getenv("PATH");
-    char *path_copy = strdup(path);
-    char *dir = strtok(path_copy, ":");
-    char command_path[BUFFER_SIZE];
-    int command_found = 0;
-
-    while (dir != NULL) {
-      snprintf(command_path, sizeof(command_path), "%s/%s", dir, args[0]);
-      if (access(command_path, X_OK) == 0) {
-        command_found = 1;
-        break;
-      }
-      dir = strtok(NULL, ":");
-    }
-
-    free(path_copy);
-
-    if (!command_found) {
-      fprintf(stderr, "%s: command not found\n", args[0]);
+    // Parse the input
+    arg_count = parse_input(buffer, args, MAX_ARGS);
+    if (arg_count == 0) {
+      // No arguments found, continue to the next iteration
       continue;
     }
 
-    // // Check if the file exists and is executable
-    // if (access(args[0], X_OK) == -1) {
-    //   perror("Error");
-    //   continue;  // Skip to the next iteration if the file is not executable
-    // }
-
-    // Execute the file with the provided arguments
-    pid_t pid = fork();
-    if (pid < 0) {
-      fputs("Error executing program.", stderr);
-      continue;
-    }
-    if (pid == 0) {
-      // Child process
-      execvp(command_path, args);
-      perror("Error executing command");
-      exit(EXIT_FAILURE);
+    // Find the command as an executable file
+    if (is_executable_file(args[0])) {
+      // Execute the command with the provided arguments
+      execute_command(args[0], args);
     } else {
-      // Parent process
-      wait(NULL);           // Wait for the child process to finish
-      fputs("\n", stdout);  // Put newline
+      // Find the command in the PATH
+      if (!find_command_in_path(args[0], command_path)) {
+        fprintf(stderr, "%s: command not found\n", args[0]);
+        continue;
+      }
+
+      // Execute the command with the provided arguments
+      execute_command(command_path, args);
     }
   }
 
