@@ -13,6 +13,12 @@
     "dirent.h": "c",
     "fcntl.h": "c",
     "utils.h": "c",
-    "cerrno": "c"
+    "cerrno": "c",
+    "cstdlib": "c",
+    "input_parser.h": "c",
+    "find.h": "c",
+    "stdbool.h": "c",
+    "execute.h": "c",
+    "wait.h": "c"
   }
 }
