@@ -1,17 +1,20 @@
 /**
  * @file copia.c
+ *
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
+ * @author Diogo Araujo Machado (a26042@alunos.ipca.pt)
+ *
  * @brief Creates a copy of the specified file.
  *
  * This program utility creates a new file named "ficheiro.copia" with the
  * content copied from the specified file. If the specified file does not exist
  * or cannot be opened for reading, the utility program returns 1.
  *
- * @version 0.1
+ * @version 0.2
  * @date 2024-04-18
  *
- * * @section Modifications
- * - 2024-04-22: Program now receives a destination file as an argument.
+ * @section Modifications
+ * - 2024-04-22: Added optional copy name parameter.
  *   Diogo Araujo Machado (a26042@alunos.ipca.pt)
  *
  */
@@ -40,8 +43,8 @@ static char *dest_file_name = NULL;
   "Usage: copia <filename> <destination file>\n"              \
   "Creates a copy of a given file.\n"                         \
   "Arguments:\n"                                              \
-  "  <filename>  The name of the file to create a copy of.\n" \
-  "  (copyname) The name of the copy (optional).\n"           \
+  "  <file_name>  The name of the file to create a copy of.\n" \
+  "  (copy_name)  The name of the copy (optional).\n"           \
   "\n"                                                        \
   "Options:\n"                                                \
   "  --help      Display this help message.\n"
