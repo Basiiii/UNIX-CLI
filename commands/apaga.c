@@ -1,7 +1,14 @@
 /**
  * @file apaga.c
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
- * @brief
+ * @brief Deletes a file from the filesystem.
+ *
+ * This function attempts to remove the specified file from the filesystem. If
+ * the file is successfully removed, the function returns 0. If the
+ * file cannot be removed, for example, due to insufficient permissions or
+ * because the file is in use, the program prints the error using perror (see
+ * the errno.h header for more information) and returns 1.
+ *
  * @version 0.1
  * @date 2024-04-18
  *
