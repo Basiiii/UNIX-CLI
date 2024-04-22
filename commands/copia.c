@@ -31,13 +31,14 @@ static char const *src_file_name;
 static char *dest_file_name;
 
 /* Help message explaining usage. */
-#define HELP_MESSAGE                                          \
-  "Usage: copia <filename>\n"                                 \
-  "Creates a copy of a given file.\n"                         \
-  "Arguments:\n"                                              \
-  "  <filename>  The name of the file to create a copy of.\n" \
-  "\n"                                                        \
-  "Options:\n"                                                \
+#define HELP_MESSAGE                                                   \
+  "Usage: copia <filename> <destination file>\n"                       \
+  "Creates a copy of a given file.\n"                                  \
+  "Arguments:\n"                                                       \
+  "  <filename>  The name of the file to create a copy of.\n"          \
+  "  <destination file> The name of the file to copy to (optional).\n" \
+  "\n"                                                                 \
+  "Options:\n"                                                         \
   "  --help      Display this help message.\n"
 
 /**
@@ -72,16 +73,24 @@ int main(const int argc, const char *argv[]) {
   // Set `sourcefilename` to given name
   src_file_name = argv[1];
 
-  // Allocate memory for dest_file_name
-  dest_file_name = (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
+  // in case the user gives a name for the destination file
+  if (argc == 3 && strcmp(argv[2], "--help") != 0) {
+    dest_file_name = (char *)malloc(strlen(argv[2]) + 1);
+    dest_file_name = argv[2];
+    strcpy(dest_file_name, argv[2]);
+  }
+
+  else {  // in case the user doesn't give a name for the destination file
+    dest_file_name =
+        (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
+    dest_file_name = src_file_name;
+    strcat(dest_file_name, ".copia");
+  }
+
   if (dest_file_name == NULL) {
     fputs("Error: Memory allocation failed.\n", stderr);
     return EXIT_FAILURE;
   }
-
-  // Concatenate ".copia" to the end of dest_file_name
-  strcpy(dest_file_name, src_file_name);
-  strcat(dest_file_name, ".copia");
 
   // Open the source file in read-only mode
   int srcfd = open(src_file_name, O_RDONLY);
