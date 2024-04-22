@@ -9,6 +9,11 @@
  *
  * @version 0.1
  * @date 2024-04-18
+ *
+ * * @section Modifications
+ * - 2024-04-22: Program now receives a destination file as an argument.
+ *   Diogo Araujo Machado (a26042@alunos.ipca.pt)
+ *
  */
 #define _XOPEN_SOURCE 700
 
@@ -25,10 +30,10 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *src_file_name;
+static char const *src_file_name = NULL;
 
 /* Name of destination file. */
-static char *dest_file_name;
+static char *dest_file_name = NULL;
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                                   \
@@ -75,21 +80,16 @@ int main(const int argc, const char *argv[]) {
 
   // in case the user gives a name for the destination file
   if (argc == 3 && strcmp(argv[2], "--help") != 0) {
-    dest_file_name = (char *)malloc(strlen(argv[2]) + 1);
     dest_file_name = argv[2];
-    strcpy(dest_file_name, argv[2]);
-  }
-
-  else {  // in case the user doesn't give a name for the destination file
+  } else {  // in case the user doesn't give a name for the destination file
     dest_file_name =
         (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
-    dest_file_name = src_file_name;
+    if (dest_file_name == NULL) {
+      fputs("Error: Memory allocation failed.\n", stderr);
+      return EXIT_FAILURE;
+    }
+    strcpy(dest_file_name, src_file_name);
     strcat(dest_file_name, ".copia");
-  }
-
-  if (dest_file_name == NULL) {
-    fputs("Error: Memory allocation failed.\n", stderr);
-    return EXIT_FAILURE;
   }
 
   // Open the source file in read-only mode
@@ -136,7 +136,9 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Free memory
-  free(dest_file_name);
-
+  if (dest_file_name != NULL && argc == 2) {
+    free(dest_file_name);
+    dest_file_name = NULL;
+  }
   return EXIT_SUCCESS;
 }
