@@ -1,18 +1,24 @@
 /**
  * @file copia.c
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
+ * @author Diogo Araujo Machado (a26042@alunos.ipca.pt)
  * @brief Creates a copy of the specified file.
  *
  * This program utility creates a new file named "ficheiro.copia" with the
  * content copied from the specified file. If the specified file does not exist
  * or cannot be opened for reading, the utility program returns 1.
  *
- * @version 0.1
+ * @version 0.2
  * @date 2024-04-18
+ *
+ * @section Modifications
+ * - 2024-04-22: Added optional copy name parameter.
+ *   Diogo Araujo Machado (a26042@alunos.ipca.pt)
  */
 #define _XOPEN_SOURCE 700
 
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,19 +31,20 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *src_file_name;
+static char const *src_file_name = NULL;
 
 /* Name of destination file. */
-static char *dest_file_name;
+static char *dest_file_name = NULL;
 
 /* Help message explaining usage. */
-#define HELP_MESSAGE                                          \
-  "Usage: copia <filename>\n"                                 \
-  "Creates a copy of a given file.\n"                         \
-  "Arguments:\n"                                              \
-  "  <filename>  The name of the file to create a copy of.\n" \
-  "\n"                                                        \
-  "Options:\n"                                                \
+#define HELP_MESSAGE                                           \
+  "Usage: copia <filename> <destination file>\n"               \
+  "Creates a copy of a given file.\n"                          \
+  "Arguments:\n"                                               \
+  "  <file_name>  The name of the file to create a copy of.\n" \
+  "  (copy_name)  The name of the copy (optional).\n"          \
+  "\n"                                                         \
+  "Options:\n"                                                 \
   "  --help      Display this help message.\n"
 
 /**
@@ -69,24 +76,32 @@ int main(const int argc, const char *argv[]) {
     return EXIT_SUCCESS;
   }
 
+  // Custom name flag
+  bool custom_name = (argc != 2);
+
   // Set `sourcefilename` to given name
   src_file_name = argv[1];
 
-  // Allocate memory for dest_file_name
-  dest_file_name = (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
-  if (dest_file_name == NULL) {
-    fputs("Error: Memory allocation failed.\n", stderr);
-    return EXIT_FAILURE;
+  // Update destination file name
+  if (custom_name) {
+    dest_file_name = strdup(argv[2]);
+  } else {
+    size_t source_len = strlen(src_file_name);
+    size_t extension_len = strlen(".copia");
+    dest_file_name = (char *)malloc(source_len + extension_len + 1);
+    if (dest_file_name == NULL) {
+      fputs("Error: Memory allocation failed.\n", stderr);
+      return EXIT_FAILURE;
+    }
+    strcpy(dest_file_name, src_file_name);
+    strcat(dest_file_name, ".copia");
   }
-
-  // Concatenate ".copia" to the end of dest_file_name
-  strcpy(dest_file_name, src_file_name);
-  strcat(dest_file_name, ".copia");
 
   // Open the source file in read-only mode
   int srcfd = open(src_file_name, O_RDONLY);
   if (srcfd == -1) {
     perror("Error");
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
@@ -94,8 +109,9 @@ int main(const int argc, const char *argv[]) {
   int destfd =
       open(dest_file_name, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   if (destfd == -1) {
-    close(srcfd);
     perror("Error");
+    close(srcfd);
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
@@ -108,6 +124,7 @@ int main(const int argc, const char *argv[]) {
       perror("Error");
       close(srcfd);
       close(destfd);
+      free(dest_file_name);
       return EXIT_FAILURE;
     }
   }
@@ -117,12 +134,14 @@ int main(const int argc, const char *argv[]) {
     perror("Error:");
     close(srcfd);
     close(destfd);
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
   // Close files
   if (close(srcfd) == -1 || close(destfd) == -1) {
     perror("Error:");
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
