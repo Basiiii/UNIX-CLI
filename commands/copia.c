@@ -36,14 +36,14 @@ static char const *src_file_name = NULL;
 static char *dest_file_name = NULL;
 
 /* Help message explaining usage. */
-#define HELP_MESSAGE                                                   \
-  "Usage: copia <filename> <destination file>\n"                       \
-  "Creates a copy of a given file.\n"                                  \
-  "Arguments:\n"                                                       \
-  "  <filename>  The name of the file to create a copy of.\n"          \
-  "  <destination file> The name of the file to copy to (optional).\n" \
-  "\n"                                                                 \
-  "Options:\n"                                                         \
+#define HELP_MESSAGE                                          \
+  "Usage: copia <filename> <destination file>\n"              \
+  "Creates a copy of a given file.\n"                         \
+  "Arguments:\n"                                              \
+  "  <filename>  The name of the file to create a copy of.\n" \
+  "  (copyname) The name of the copy (optional).\n"           \
+  "\n"                                                        \
+  "Options:\n"                                                \
   "  --help      Display this help message.\n"
 
 /**
