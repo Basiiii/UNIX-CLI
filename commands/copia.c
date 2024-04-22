@@ -1,9 +1,7 @@
 /**
  * @file copia.c
- *
  * @author Enrique Rodrigues (a28602@alunos.ipca.pt)
  * @author Diogo Araujo Machado (a26042@alunos.ipca.pt)
- *
  * @brief Creates a copy of the specified file.
  *
  * This program utility creates a new file named "ficheiro.copia" with the
@@ -16,11 +14,11 @@
  * @section Modifications
  * - 2024-04-22: Added optional copy name parameter.
  *   Diogo Araujo Machado (a26042@alunos.ipca.pt)
- *
  */
 #define _XOPEN_SOURCE 700
 
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,14 +37,14 @@ static char const *src_file_name = NULL;
 static char *dest_file_name = NULL;
 
 /* Help message explaining usage. */
-#define HELP_MESSAGE                                          \
-  "Usage: copia <filename> <destination file>\n"              \
-  "Creates a copy of a given file.\n"                         \
-  "Arguments:\n"                                              \
+#define HELP_MESSAGE                                           \
+  "Usage: copia <filename> <destination file>\n"               \
+  "Creates a copy of a given file.\n"                          \
+  "Arguments:\n"                                               \
   "  <file_name>  The name of the file to create a copy of.\n" \
-  "  (copy_name)  The name of the copy (optional).\n"           \
-  "\n"                                                        \
-  "Options:\n"                                                \
+  "  (copy_name)  The name of the copy (optional).\n"          \
+  "\n"                                                         \
+  "Options:\n"                                                 \
   "  --help      Display this help message.\n"
 
 /**
@@ -78,15 +76,19 @@ int main(const int argc, const char *argv[]) {
     return EXIT_SUCCESS;
   }
 
+  // Custom name flag
+  bool custom_name = (argc != 2);
+
   // Set `sourcefilename` to given name
   src_file_name = argv[1];
 
-  // in case the user gives a name for the destination file
-  if (argc == 3 && strcmp(argv[2], "--help") != 0) {
-    dest_file_name = argv[2];
-  } else {  // in case the user doesn't give a name for the destination file
-    dest_file_name =
-        (char *)malloc(strlen(src_file_name) + strlen(".copia") + 1);
+  // Update destination file name
+  if (custom_name) {
+    dest_file_name = strdup(argv[2]);
+  } else {
+    size_t source_len = strlen(src_file_name);
+    size_t extension_len = strlen(".copia");
+    dest_file_name = (char *)malloc(source_len + extension_len + 1);
     if (dest_file_name == NULL) {
       fputs("Error: Memory allocation failed.\n", stderr);
       return EXIT_FAILURE;
@@ -139,9 +141,7 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Free memory
-  if (dest_file_name != NULL && argc == 2) {
-    free(dest_file_name);
-    dest_file_name = NULL;
-  }
+  free(dest_file_name);
+
   return EXIT_SUCCESS;
 }
