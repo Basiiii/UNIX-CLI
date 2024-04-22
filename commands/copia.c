@@ -101,6 +101,7 @@ int main(const int argc, const char *argv[]) {
   int srcfd = open(src_file_name, O_RDONLY);
   if (srcfd == -1) {
     perror("Error");
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
@@ -108,8 +109,9 @@ int main(const int argc, const char *argv[]) {
   int destfd =
       open(dest_file_name, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
   if (destfd == -1) {
-    close(srcfd);
     perror("Error");
+    close(srcfd);
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
@@ -122,6 +124,7 @@ int main(const int argc, const char *argv[]) {
       perror("Error");
       close(srcfd);
       close(destfd);
+      free(dest_file_name);
       return EXIT_FAILURE;
     }
   }
@@ -131,12 +134,14 @@ int main(const int argc, const char *argv[]) {
     perror("Error:");
     close(srcfd);
     close(destfd);
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
   // Close files
   if (close(srcfd) == -1 || close(destfd) == -1) {
     perror("Error:");
+    free(dest_file_name);
     return EXIT_FAILURE;
   }
 
