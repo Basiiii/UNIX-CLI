@@ -48,10 +48,10 @@
 int main() {
   printf("%s version %s.\n\n", PROGRAM_NAME, VERSION);
 
-  char buffer[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE_BYTES];
   ssize_t bytes_read;
   char *args[MAX_ARGS];
-  char command_path[BUFFER_SIZE];
+  char command_path[BUFFER_SIZE_BYTES];
   int arg_count;
 
   while (1) {
@@ -60,7 +60,7 @@ int main() {
     fflush(stdout);  // Ensure the prompt is displayed
 
     // Read user input
-    bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
+    bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE_BYTES - 1);
     if (bytes_read < 0) {
       perror("Error");
       return EXIT_FAILURE;
