@@ -51,7 +51,7 @@ bool find_command_in_path(const char *command, char *command_path) {
   char *dir = strtok(path_copy, ":");
 
   while (dir != NULL) {
-    snprintf(command_path, BUFFER_SIZE, "%s/%s", dir, command);
+    snprintf(command_path, BUFFER_SIZE_BYTES, "%s/%s", dir, command);
     if (is_executable_file(command_path)) {
       free(path_copy);
       return true;

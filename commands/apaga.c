@@ -26,9 +26,6 @@
 /* Name of the utility program. */
 #define PROGRAM_NAME "apaga"
 
-/* Name of input file. */
-static char const *file_name;
-
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                    \
   "Usage: apaga <filename>\n"                           \
@@ -70,8 +67,7 @@ int main(const int argc, const char *argv[]) {
     return EXIT_SUCCESS;
   }
 
-  // Set `sourcefilename` to given name
-  file_name = argv[1];
+  const char *file_name = argv[1];
 
   // Delete the file
   if (unlink(file_name) != 0) {

@@ -29,10 +29,7 @@
 #define PROGRAM_NAME "conta"
 
 /* Size of buffer when reading from file */
-#define BUFFER_SIZE 4096  // 4KB buffer size
-
-/* Name of input file. */
-static char const *src_file_name;
+#define BUFFER_SIZE_BYTES 4096  // 4KB buffer size
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                              \
@@ -76,23 +73,20 @@ int main(const int argc, const char *argv[]) {
     return EXIT_SUCCESS;
   }
 
-  // Set `sourcefilename` to given name
-  src_file_name = argv[1];
-
+  const char *src_file = argv[1];
   int num_lines = 0;
 
   // Open the file in read-only mode
-  int fd = open(src_file_name, O_RDONLY);
+  int fd = open(src_file, O_RDONLY);
   if (fd == -1) {
     perror("Error");
     return EXIT_FAILURE;
   }
 
-  // Buffer to store read data
-  char buffer[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE_BYTES];
   ssize_t bytes_read;
 
-  // Read the file character by character
+  // Read the file in chunks
   while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
     // Iterate through buffer and count new lines
     for (ssize_t i = 0; i < bytes_read; i++) {
@@ -115,7 +109,7 @@ int main(const int argc, const char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  printf("%d", num_lines);
+  printf("%d\n", num_lines);
 
   return EXIT_SUCCESS;
 }

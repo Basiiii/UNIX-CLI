@@ -14,6 +14,8 @@
  * @section Modifications
  * - 2024-04-22: Added optional copy name parameter.
  *   Diogo Araujo Machado (a26042@alunos.ipca.pt)
+ * - 2024-04-23: Improved memory & pointer safety.
+ *   Enrique George Rodrigues (a28602@alunos.ipca.pt)
  */
 #define _XOPEN_SOURCE 700
 
@@ -28,10 +30,10 @@
 #define PROGRAM_NAME "copia"
 
 /* Size of buffer when reading from file */
-#define BUFFER_SIZE 4096  // 4KB buffer size
+#define BUFFER_SIZE_BYTES 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *src_file_name = NULL;
+static char const *src_file = NULL;
 
 /* Name of destination file. */
 static char *dest_file_name = NULL;
@@ -76,29 +78,27 @@ int main(const int argc, const char *argv[]) {
     return EXIT_SUCCESS;
   }
 
-  // Custom name flag
   bool custom_name = (argc != 2);
-
-  // Set `sourcefilename` to given name
-  src_file_name = argv[1];
+  src_file = argv[1];
 
   // Update destination file name
   if (custom_name) {
     dest_file_name = strdup(argv[2]);
   } else {
-    size_t source_len = strlen(src_file_name);
+    size_t source_len = strlen(src_file);
     size_t extension_len = strlen(".copia");
+    // TODO: Use malloc or static memory? If malloc, check for size.
     dest_file_name = (char *)malloc(source_len + extension_len + 1);
     if (dest_file_name == NULL) {
       fputs("Error: Memory allocation failed.\n", stderr);
       return EXIT_FAILURE;
     }
-    strcpy(dest_file_name, src_file_name);
+    strcpy(dest_file_name, src_file);
     strcat(dest_file_name, ".copia");
   }
 
   // Open the source file in read-only mode
-  int srcfd = open(src_file_name, O_RDONLY);
+  int srcfd = open(src_file, O_RDONLY);
   if (srcfd == -1) {
     perror("Error");
     free(dest_file_name);
@@ -116,7 +116,7 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Read data from source file and write to destination file
-  char buffer[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE_BYTES];
   ssize_t bytes_read;
   while ((bytes_read = read(srcfd, buffer, sizeof(buffer))) > 0) {
     ssize_t bytes_written = write(destfd, buffer, bytes_read);

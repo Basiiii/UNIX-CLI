@@ -29,7 +29,7 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Name of input file. */
-static char const *src_file_name;
+static char const *src_file;
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                 \
@@ -74,17 +74,17 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Set filename to given name
-  src_file_name = argv[1];
+  src_file = argv[1];
 
   // Open the file in read-only mode
-  int fd = open(src_file_name, O_RDONLY);
+  int fd = open(src_file, O_RDONLY);
   if (fd == -1) {
     perror("Error");
     return EXIT_FAILURE;
   }
 
   // Read and output the contents of the file
-  char buffer[BUFFER_SIZE];  // Buffer to store read data
+  char buffer[BUFFER_SIZE_BYTES];  // Buffer to store read data
   ssize_t bytes_read;
   while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
     if (write(STDOUT_FILENO, buffer, bytes_read) != bytes_read) {

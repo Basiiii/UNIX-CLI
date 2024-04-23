@@ -31,13 +31,14 @@
 #define BUFFER_SIZE 4096  // 4KB buffer size
 
 /* Help message explaining usage. */
-#define HELP_MESSAGE                                 \
-  "Usage: list (directory)\n"                        \
-  "Counts the number of lines a file contains.\n"    \
-  "Arguments:\n"                                     \
-  "  (file)  OPTIONAL directory, default is `.` .\n" \
-  "\n"                                               \
-  "Options:\n"                                       \
+#define HELP_MESSAGE                                          \
+  "Usage: list (directory)\n"                                 \
+  "Lists content of a given directory.\n"                     \
+  "If no argument is given, defaults to current directory.\n" \
+  "Arguments:\n"                                              \
+  "  (directory)  The name of the directory (optional).\n"    \
+  "\n"                                                        \
+  "Options:\n"                                                \
   "  --help      Display this help message.\n"
 
 /**
