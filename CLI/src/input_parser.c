@@ -6,7 +6,10 @@
  * @date 2024-04-21
  * @copyright Copyright (c) 2024
  */
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /**
@@ -24,16 +27,20 @@
 int parse_input(char *input, char *args[], int max_args) {
   char *token;
   int arg_count = 0;
+  char *rest = input;  // Pointer to keep track of the remaining string
 
-  // Tokenize the input string by spaces
-  token = strtok(input, " ");
-  while (token != NULL && arg_count < max_args - 1) {
+  // Tokenize the input string by spaces using strsep()
+  while ((token = strsep(&rest, " ")) != NULL && arg_count < max_args) {
+    // Ignore empty tokens
+    if (*token == '\0') {
+      continue;
+    }
     // Store the token in the args array
     args[arg_count++] = token;
-    // Get the next token
-    token = strtok(NULL, " ");
   }
-  args[arg_count] = NULL;  // Ensure the last argument is NULL
+
+  // Ensure the last element of args is NULL
+  args[arg_count] = NULL;
 
   return arg_count;
 }

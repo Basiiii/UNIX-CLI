@@ -32,12 +32,6 @@
 /* Size of buffer when reading from file */
 #define BUFFER_SIZE_BYTES 4096  // 4KB buffer size
 
-/* Name of input file. */
-static char const *src_file = NULL;
-
-/* Name of destination file. */
-static char *dest_file_name = NULL;
-
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                           \
   "Usage: copia <filename> <destination file>\n"               \
@@ -79,15 +73,21 @@ int main(const int argc, const char *argv[]) {
   }
 
   bool custom_name = (argc != 2);
-  src_file = argv[1];
+  const char *src_file = argv[1];
+  char *dest_file_name = NULL;
 
   // Update destination file name
   if (custom_name) {
-    dest_file_name = strdup(argv[2]);
+    size_t dest_len = strlen(argv[2]);
+    dest_file_name = (char *)malloc(dest_len + 1);
+    if (dest_file_name == NULL) {
+      fputs("Error: Memory allocation failed.\n", stderr);
+      return EXIT_FAILURE;
+    }
+    strcpy(dest_file_name, argv[2]);
   } else {
     size_t source_len = strlen(src_file);
     size_t extension_len = strlen(".copia");
-    // TODO: Use malloc or static memory? If malloc, check for size.
     dest_file_name = (char *)malloc(source_len + extension_len + 1);
     if (dest_file_name == NULL) {
       fputs("Error: Memory allocation failed.\n", stderr);
@@ -131,7 +131,7 @@ int main(const int argc, const char *argv[]) {
 
   // Check for read error
   if (bytes_read == -1) {
-    perror("Error:");
+    perror("Error");
     close(srcfd);
     close(destfd);
     free(dest_file_name);
@@ -140,7 +140,7 @@ int main(const int argc, const char *argv[]) {
 
   // Close files
   if (close(srcfd) == -1 || close(destfd) == -1) {
-    perror("Error:");
+    perror("Error");
     free(dest_file_name);
     return EXIT_FAILURE;
   }

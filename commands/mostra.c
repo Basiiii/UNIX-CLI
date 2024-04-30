@@ -26,10 +26,7 @@
 #define PROGRAM_NAME "mostra"
 
 /* Size of buffer when reading from file */
-#define BUFFER_SIZE 4096  // 4KB buffer size
-
-/* Name of input file. */
-static char const *src_file;
+#define BUFFER_SIZE_BYTES 4096  // 4KB buffer size
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                 \
@@ -59,7 +56,7 @@ static char const *src_file;
  * error occurs, prints the error using perror (see the errno.h header for more
  * information) and returns 1.
  */
-int main(const int argc, const char *argv[]) {
+int main(const int argc, const char* argv[]) {
   // Control incorrect usage
   if (argc < 2) {
     fputs("Error: Incorrect usage.\n", stderr);
@@ -74,7 +71,7 @@ int main(const int argc, const char *argv[]) {
   }
 
   // Set filename to given name
-  src_file = argv[1];
+  const char* src_file = argv[1];
 
   // Open the file in read-only mode
   int fd = open(src_file, O_RDONLY);

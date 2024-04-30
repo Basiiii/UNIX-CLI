@@ -84,7 +84,7 @@ int main(const int argc, const char *argv[]) {
   }
 
   char buffer[BUFFER_SIZE_BYTES];
-  ssize_t bytes_read;
+  ssize_t bytes_read = 0;
 
   // Read the file in chunks
   while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
@@ -109,7 +109,7 @@ int main(const int argc, const char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  printf("%d\n", num_lines);
+  fprintf(stdout, "%d\n", num_lines);
 
   return EXIT_SUCCESS;
 }

@@ -19,6 +19,7 @@
     "find.h": "c",
     "stdbool.h": "c",
     "execute.h": "c",
-    "wait.h": "c"
+    "wait.h": "c",
+    "strings.h": "c"
   }
 }

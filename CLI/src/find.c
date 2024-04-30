@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2024
  */
 #define _XOPEN_SOURCE 700
+#define _DEFAULT_SOURCE
 
 #include <constants.h>
 #include <stdbool.h>
@@ -48,15 +49,16 @@ bool find_command_in_path(const char *command, char *command_path) {
   // Search for the command in the PATH
   char *path = getenv("PATH");
   char *path_copy = strdup(path);
-  char *dir = strtok(path_copy, ":");
+  char *rest = path_copy;  // Pointer to keep track of the remaining string
 
+  char *dir = strsep(&rest, ":");
   while (dir != NULL) {
     snprintf(command_path, BUFFER_SIZE_BYTES, "%s/%s", dir, command);
     if (is_executable_file(command_path)) {
       free(path_copy);
       return true;
     }
-    dir = strtok(NULL, ":");
+    dir = strsep(&rest, ":");
   }
 
   free(path_copy);

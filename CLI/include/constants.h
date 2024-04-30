@@ -33,7 +33,7 @@
 #define MAX_ARGS 64              // maximum number of arguments
 
 /* BUFFERS */
-#define BUFFER_SIZE 4096  // max buffer size
+#define BUFFER_SIZE_BYTES 4096  // max buffer size
 
 /* FILE INFORMATION */
 #define FILE_INFO_STR_SIZE 50  // size of strings in `FileInfo` structure
