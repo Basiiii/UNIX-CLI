@@ -1,10 +1,12 @@
 # Coding Standards
 
-## 1. Introduction
+## Introduction
 
-This document outlines the coding standards and guidelines to be followed in the project. Adhering to these standards ensures consistency, readability, and maintainability of the codebase.
+This document outlines the coding standards and guidelines that are followed in the project. Adhering to these standards ensures consistency, readability, and maintainability of the codebase.
 
-## 2. Naming Conventions
+## Naming Conventions
+
+Naming conventions should follow:
 
 - Functions: `functionsLikeThis()`
 - Variables: `variables_like_this`
@@ -13,20 +15,20 @@ This document outlines the coding standards and guidelines to be followed in the
 - Structs: `StructsLikeThis`
 - Avoid using all uppercase names except for constants.
 
-## 3. Formatting Guidelines
+## Formatting Guidelines
 
 - Indentation: Use 2 spaces for indentation, not tabs.
 - Line Length: Keep lines limited to a maximum of 80 characters.
 - Braces: Place opening braces on the same line as the control statement.
 - Comments: Use descriptive comments to explain complex code sections. Follow a consistent commenting style.
 
-## 4. Coding Practices
+## Coding Practices
 
 - Follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) for general formatting and style.
 - Use meaningful variable and function names.
 - Write clear and concise code. Avoid unnecessary complexity.
 
-## 5. Version Control
+## Version Control
 
 - Use Git for version control to manage the codebase effectively.
 - Follow the Git branching model:
@@ -36,7 +38,7 @@ This document outlines the coding standards and guidelines to be followed in the
   - Avoid committing directly to the `main` branch.
   - Regularly merge feature branches back into `main` after thorough testing.
 
-## 6. Documentation
+## Documentation
 
 - Use Doxygen for documenting code to automatically generate API documentation.
 
@@ -64,6 +66,6 @@ This document outlines the coding standards and guidelines to be followed in the
      */
     ```
 
-## 7. Conclusion
+## Conclusion
 
 Adhering to these coding standards is essential for maintaining a high-quality codebase. By following these guidelines, we ensure consistency across the project and make it easier for developers to understand, contribute to, and maintain the code.
