@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project involves the implementation of a set of commands for file manipulation and a custom command-line interpreter. This project comes with specific requirements and constraints, aiming to test and enhance our understanding of low level system calls to the Linux operating system and, process management.
+This project involves the implementation of a set of commands for file manipulation and a custom command-line interpreter. This project comes with specific requirements and constraints, aiming to test and enhance our understanding of low level system calls to the Linux operating system and process management.
 
 ## Features
 
@@ -50,8 +50,18 @@ Upon successful compilation, the compiled program and the different commands wil
 
 ## Commands
 
-Coming soon.
+Some of the available commands include:
 
-## Example Usage
+- `acrescenta`- allows you to append content from one file to another.
+- `apaga`- allows you to delete a file.
+- `conta`- allows you to count the number of lines in a file.
+- `copia`- allows you to copy a file.
+- `informa`- gives information about a file.
+- `lista`- lists all files and directories under a given (or current by default) directory
+- `mostra`- displays content of a file.
 
-Coming soon.
+## Conclusion
+
+In conclusion, the UNIX-CLI project has been a valuable learning experience, providing hands-on exploration of low-level system calls and process management in the Linux environment. Through the implementation of essential file manipulation commands and a custom command-line interpreter, I have gained a deeper understanding of how the operating system interacts with files and processes.
+
+By working on features such as displaying file contents, copying, appending, counting lines, and deleting files, I have honed my skills in file system operations and learned about the underlying mechanisms involved. The development of the custom command-line interpreter has further reinforced my understanding of command execution and process management.

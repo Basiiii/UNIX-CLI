@@ -50,7 +50,7 @@ int main() {
 
   char buffer[BUFFER_SIZE_BYTES];
   ssize_t bytes_read;
-  char *args[MAX_ARGS];
+  char *args[MAX_ARGS + 1];
   char command_path[BUFFER_SIZE_BYTES];
   int arg_count;
 

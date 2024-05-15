@@ -22,13 +22,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 /* Name of the utility program. */
 #define PROGRAM_NAME "lista"
 
-/* Size of buffer when reading from file */
+/* Size of buffer when reading from file. */
 #define BUFFER_SIZE 4096  // 4KB buffer size
+
+/* Max size to hold full path. */
+#define PATH_MAX 257
 
 /* Help message explaining usage. */
 #define HELP_MESSAGE                                          \
@@ -85,7 +89,20 @@ int main(const int argc, const char *argv[]) {
     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
       continue;
 
-    printf("%-30s\t[file]\n", entry->d_name);
+    // Check if it's a directory
+    struct stat entry_stat;
+    char full_path[PATH_MAX];
+    snprintf(full_path, sizeof(full_path), "%s/%s", dir_name, entry->d_name);
+    if (stat(full_path, &entry_stat) == 0) {
+      if (S_ISDIR(entry_stat.st_mode)) {
+        printf("%-30s\t[directory]\n", entry->d_name);
+      } else {
+        printf("%-30s\t[file]\n", entry->d_name);
+      }
+    } else {
+      fprintf(stderr, "Error stating file '%s': %s\n", full_path,
+              strerror(errno));
+    }
   }
 
   // Close directory
