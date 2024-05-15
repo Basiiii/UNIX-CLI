@@ -12,7 +12,7 @@ INCLUDE_DIR = $(CLI_DIR)/include
 SRC_DIR = $(CLI_DIR)/src
 
 # Program name
-PROGRAM_NAME = unix-cli
+PROGRAM_NAME = interpretador
 
 # Find all source files in commands/
 COMMAND_SOURCES := $(wildcard $(COMMANDS_DIR)/*.c)
