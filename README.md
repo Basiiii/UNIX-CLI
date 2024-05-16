@@ -2,7 +2,7 @@
 
 ## Overview
 
-As a student undertaking a Computer Engineering bachelor's program, this project is part of my Operating Systems class. It involves implementing a set of commands for file manipulation and creating a custom command-line interpreter. The project is structured with specific requirements and constraints to challenge and improve my comprehension of low-level system calls to the Linux operating system and process management.
+This project involves implementing a set of commands for file manipulation and creating a custom command-line interpreter. The project is structured with specific requirements and constraints to challenge and improve comprehension of low-level system calls to the Linux operating system and process management.
 
 ## Features
 
@@ -27,7 +27,7 @@ As a student undertaking a Computer Engineering bachelor's program, this project
 
 ## Compilation
 
-To compile UNIX-CLI, run the `make` command. This command will compile both the custom commands and the command-line interpreter (CLI) together. Alternatively, if you wish to compile only the CLI, you can execute `make cli`. Similarly, to compile only the custom commands, use `make commands`.
+To compile, run the `make` command. This command will compile both the custom commands and the command-line interpreter (CLI) together. Alternatively, if you wish to compile only the CLI, you can execute `make cli`. Similarly, to compile only the custom commands, use `make commands`.
 
 ```bash
 # Compile both the CLI and custom commands
@@ -62,6 +62,6 @@ Some of the available commands include:
 
 ## Conclusion
 
-In conclusion, the UNIX-CLI project has been a valuable learning experience, providing hands-on exploration of low-level system calls and process management in the Linux environment. Through the implementation of essential file manipulation commands and a custom command-line interpreter, I have gained a deeper understanding of how the operating system interacts with files and processes.
+In conclusion, the project has been a valuable learning experience, providing hands-on exploration of low-level system calls and process management in the Linux environment. Through the implementation of essential file manipulation commands and a custom command-line interpreter, we have gained a deeper understanding of how the operating system interacts with files and processes.
 
-By working on features such as displaying file contents, copying, appending, counting lines, and deleting files, I have honed my skills in file system operations and learned about the underlying mechanisms involved. The development of the custom command-line interpreter has further reinforced my understanding of command execution and process management.
+By working on features such as displaying file contents, copying, appending, counting lines, and deleting files, we have honed my skills in file system operations and learned about the underlying mechanisms involved. The development of the custom command-line interpreter has further reinforced our understanding of command execution and process management.
