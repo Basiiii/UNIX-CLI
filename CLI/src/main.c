@@ -73,30 +73,30 @@ int main() {
     buffer[bytes_read - 1] = '\0';
 
     // Check if user wants to end the program
-    if (should_exit(buffer)) {
+    if (shouldExit(buffer)) {
       exit(EXIT_SUCCESS);
     }
 
     // Parse the input
-    arg_count = parse_input(buffer, args, MAX_ARGS);
+    arg_count = parseInput(buffer, args, MAX_ARGS);
     if (arg_count == 0) {
       // No arguments found, continue to the next iteration
       continue;
     }
 
     // Find the command as an executable file
-    if (is_executable_file(args[0])) {
+    if (isExecutableFile(args[0])) {
       // Execute the command with the provided arguments
-      execute_command(args[0], args);
+      executeCommand(args[0], args);
     } else {
       // Find the command in the PATH
-      if (!find_command_in_path(args[0], command_path)) {
+      if (!findCommandInPath(args[0], command_path)) {
         fprintf(stderr, "%s: command not found\n", args[0]);
         continue;
       }
 
       // Execute the command with the provided arguments
-      execute_command(command_path, args);
+      executeCommand(command_path, args);
     }
   }
 

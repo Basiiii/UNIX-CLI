@@ -23,6 +23,6 @@
  * @param input The input string to check.
  * @return true if the input string indicates program exit, false otherwise.
  */
-bool should_exit(const char *input);
+bool shouldExit(const char *input);
 
 #endif /* UTILS_H */

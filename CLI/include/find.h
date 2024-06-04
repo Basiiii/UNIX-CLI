@@ -22,7 +22,7 @@
  * @param path The path to the file.
  * @return true if the file is executable, false otherwise.
  */
-bool is_executable_file(const char *path);
+bool isExecutableFile(const char *path);
 
 /**
  * @brief Finds the full path of a command in the PATH environment variable.
@@ -35,6 +35,6 @@ bool is_executable_file(const char *path);
  * @param command_path A buffer to store the full path of the command.
  * @return true if the command is found, false otherwise.
  */
-bool find_command_in_path(const char *command, char *command_path);
+bool findCommandInPath(const char *command, char *command_path);
 
 #endif /* FIND_H */
