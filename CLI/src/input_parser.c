@@ -24,7 +24,7 @@
  * @param max_args The maximum number of arguments that can be stored.
  * @return int The number of arguments parsed and stored in the `args` array.
  */
-int parse_input(char *input, char *args[], int max_args) {
+int parseInput(char *input, char *args[], int max_args) {
   char *token;
   int arg_count = 0;
   char *rest = input;  // Pointer to keep track of the remaining string

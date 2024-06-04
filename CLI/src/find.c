@@ -26,7 +26,7 @@
  * @param path The path to the file.
  * @return true if the file is executable, false otherwise.
  */
-bool is_executable_file(const char *path) { return access(path, X_OK) == 0; }
+bool isExecutableFile(const char *path) { return access(path, X_OK) == 0; }
 
 /**
  * @brief Finds the full path of a command in the PATH environment variable.
@@ -39,9 +39,9 @@ bool is_executable_file(const char *path) { return access(path, X_OK) == 0; }
  * @param command_path A buffer to store the full path of the command.
  * @return true if the command is found, false otherwise.
  */
-bool find_command_in_path(const char *command, char *command_path) {
+bool findCommandInPath(const char *command, char *command_path) {
   // Check if the command is executable in the current directory
-  if (is_executable_file(command)) {
+  if (isExecutableFile(command)) {
     strcpy(command_path, command);
     return true;
   }
@@ -54,7 +54,7 @@ bool find_command_in_path(const char *command, char *command_path) {
   char *dir = strsep(&rest, ":");
   while (dir != NULL) {
     snprintf(command_path, BUFFER_SIZE_BYTES, "%s/%s", dir, command);
-    if (is_executable_file(command_path)) {
+    if (isExecutableFile(command_path)) {
       free(path_copy);
       return true;
     }

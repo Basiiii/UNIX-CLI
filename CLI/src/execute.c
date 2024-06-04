@@ -22,7 +22,7 @@
  * @param command_path The path to the command to be executed.
  * @param args An array of strings containing the arguments for the command.
  */
-void execute_command(const char *command_path, char *args[]) {
+void executeCommand(const char *command_path, char *args[]) {
   pid_t pid = fork();
   if (pid < 0) {
     fputs("Error executing program.", stderr);
